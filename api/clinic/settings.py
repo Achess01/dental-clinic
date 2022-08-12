@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Local apps
     'users.apps.UsersConfig',
+    'attention.apps.AttentionConfig',
     # Third party apps
     'rest_framework',
 ]
