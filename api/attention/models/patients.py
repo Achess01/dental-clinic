@@ -16,10 +16,15 @@ class Patient(ClinicModel):
     )
 
     rut = models.CharField(
-        validators=[rut_regex], max_length=13, primary_key=True
+        validators=[rut_regex],
+        max_length=13,
+        unique=True,
+        error_messages={
+            "unique": "Patient rut must be unique"
+        }
     )
     first_name = models.CharField('first name', max_length=150)
-    last_name = models.CharField('first name', max_length=150)
+    last_name = models.CharField('last name', max_length=150)
     birthday = models.DateField('patient birthday')
     age = models.PositiveSmallIntegerField('patient age')
     ocuppation = models.CharField(
@@ -31,7 +36,13 @@ class Patient(ClinicModel):
     medical_history = models.CharField(
         'patient medical history',
         max_length=255,
-        help_text='It describes what some important medical history of the patient'
+        help_text='It describes what some important medical history of the patient',
+        blank=True
+    )
+
+    is_active = models.BooleanField(
+        default=True,
+        help_text='Wheter is active patient or was deleted (active=False)'
     )
 
     def __str__(self) -> str:
