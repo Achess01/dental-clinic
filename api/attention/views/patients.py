@@ -16,3 +16,4 @@ class PatientViewSet(viewsets.ModelViewSet):
     """
     queryset = Patient.objects.filter(is_active=True)
     serializer_class = PatientModelSerializer
+    lookup_field = 'rut'

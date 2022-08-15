@@ -2,21 +2,17 @@
 
 # Django
 from django.db import models
-from django.core.validators import RegexValidator
 
 # Utils
 from utils.models import ClinicModel
+from utils.validators import rut_regex_validator
 
 
 class Patient(ClinicModel):
-    """ Patien model """
-    rut_regex = RegexValidator(
-        regex=r'\w{9,13}$',
-        message="Rut must be atleast 9 characters and up to 13 characters."
-    )
+    """ Patien model """    
 
     rut = models.CharField(
-        validators=[rut_regex],
+        validators=[rut_regex_validator()],
         max_length=13,
         unique=True,
         error_messages={
