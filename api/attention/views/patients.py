@@ -17,3 +17,9 @@ class PatientViewSet(viewsets.ModelViewSet):
     queryset = Patient.objects.filter(is_active=True)
     serializer_class = PatientModelSerializer
     lookup_field = 'rut'
+
+
+    def perform_destroy(self, instance):
+        instance.is_active = False
+        instance.save()
+
