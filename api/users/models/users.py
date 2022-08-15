@@ -20,10 +20,13 @@ class User(ClinicModel, AbstractUser):
         message="Rut must be atleast 9 characters and up to 13 characters."
     )
 
-    username = models.CharField('username', blank=True, max_length=150, default="Staff")
-
-    rut = models.CharField(
-        validators=[rut_regex], max_length=13, primary_key=True)
+    username = models.CharField(
+        validators=[rut_regex], max_length=13, unique=True,
+        error_messages={
+            "unique": "A user with that username already exists.",
+        },
+        help_text="Must be a valid rut"
+    )
 
     phone_regex = RegexValidator(
         regex=r'\+?1?\d{9,15}$',
@@ -54,8 +57,8 @@ class User(ClinicModel, AbstractUser):
         blank=True
     )
 
-    USERNAME_FIELD = 'rut'
-    REQUIRED_FIELDS = ['phone_number', 'first_name', 'last_name', 'username']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['phone_number', 'first_name', 'last_name']
 
     is_admin = models.BooleanField('admin status', default=False)
     is_secretary = models.BooleanField('secretary status', default=False)
@@ -69,4 +72,4 @@ class User(ClinicModel, AbstractUser):
     )
 
     def __str__(self) -> str:
-        return f'{self.rut} {self.first_name} {self.last_name}'
+        return f'{self.username} {self.first_name} {self.last_name}'
