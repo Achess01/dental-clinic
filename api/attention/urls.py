@@ -7,10 +7,18 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 # views
-from .views import PatientViewSet
+from .views import (
+    PatientViewSet,
+    DiagnosticViewSet,
+    TreatmentViewSet,
+    TreatmentPerformedViewSet
+)
 
 router = DefaultRouter()
 router.register('patients', PatientViewSet, basename='patient')
+router.register('diagnostics', DiagnosticViewSet, basename='diagnostic')
+router.register('treatments', TreatmentViewSet, basename='treatment')
+router.register('treatments-performed', TreatmentPerformedViewSet, basename='treatment-performed')
 
 
 urlpatterns = [

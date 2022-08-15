@@ -12,8 +12,8 @@ class BaseOptionModel(ClinicModel):
         It helps to the admin to insert custom options 
         for save in patient records
     """
-    name = models.CharField('option name', max_length=150)
-    description = models.CharField('option name', max_length=255)
+    name = models.CharField('name', max_length=150)
+    description = models.CharField('description', max_length=255)
 
     def __str__(self) -> str:
         return f'{self.name}: {self.description}'
