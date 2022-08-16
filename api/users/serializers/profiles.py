@@ -11,11 +11,11 @@ class SpecialistModelSerializer(serializers.ModelSerializer):
     """ Specialist model serializer """
     class Meta:
         model = Specialist
-        fields = ['speciality']
+        fields = ['id', 'speciality']
 
 
 class AssistantModelSerializer(serializers.ModelSerializer):
     """ Assistant model serializer """
     class Meta:
         model = Assistant
-        fields = ['specialist']
+        fields = ['id', 'specialist']

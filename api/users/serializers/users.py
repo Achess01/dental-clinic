@@ -133,7 +133,7 @@ class AssistantSignUpSerializer(UserSignUpModelSerializer):
         validated_data.pop('specialist')
         validated_data['is_assistant'] = True
         instance = super().create(validated_data)
-        Assistant.objects.create(user=instance, specislist=specialist)
+        Assistant.objects.create(user=instance, specialist=specialist)
         return instance
 
 
@@ -176,15 +176,15 @@ class UserSecretaryModelSerializer(UserModelSerializer):
 
 class UserSpecialistModelSerializer(UserModelSerializer):
     """ User specialist model serializer """
-    specialist_user = SpecialistModelSerializer(read_only=True)
+    profile = SpecialistModelSerializer(read_only=True, source="specialist_user")
 
     class Meta(UserModelSerializer.Meta):
-        fields = UserModelSerializer.Meta.fields + ['specialist_user']
+        fields = UserModelSerializer.Meta.fields + ['profile']
 
 
 class UserAssistantModelSerializer(UserModelSerializer):
     """ User specialist model serializer """
-    assistant_user = AssistantModelSerializer(read_only=True)
+    profile = AssistantModelSerializer(read_only=True, source="assistant_user")
 
     class Meta(UserModelSerializer.Meta):
-        fields = UserModelSerializer.Meta.fields + ['assistant_user']
+        fields = UserModelSerializer.Meta.fields + ['profile']
