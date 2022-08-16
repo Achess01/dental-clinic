@@ -4,7 +4,7 @@
 from rest_framework import status, viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from users import serializers
+
 
 # Models
 from users.models import (
@@ -45,7 +45,7 @@ class UserViewSet(
         admin = serializer.save()
         data = UserModelSerializer(admin).data
         return Response({"username": admin.username, "passowrd": admin.password}, status=status.HTTP_201_CREATED)
-    
+
     @action(detail=False, methods=['post'], url_path="specialists/signup")
     def specialists(self, request):
         """ Specialist signup """
@@ -63,11 +63,23 @@ class UserViewSet(
         admin = serializer.save()
         data = UserAssistantModelSerializer(admin).data
         return Response({"username": admin.username, "passowrd": admin.password}, status=status.HTTP_201_CREATED)
-    
+
     @action(detail=False, methods=['post'], url_path="secretaries/signup")
     def secretaries(self, request):
         """ Secretary signup """
         serializer = SecretarySignUpSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        admin = serializer.save()        
+        admin = serializer.save()
         return Response({"username": admin.username, "passowrd": admin.password}, status=status.HTTP_201_CREATED)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)        
+        if instance.is_specialist:
+            serializer = UserSpecialistModelSerializer(instance)
+            print(serializer)
+            return Response(serializer.data)
+        if instance.is_assistant:
+            serializer = UserAssistantModelSerializer(instance)
+            return Response(serializer.data)
+        return Response(serializer.data)

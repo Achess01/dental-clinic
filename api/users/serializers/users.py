@@ -176,15 +176,15 @@ class UserSecretaryModelSerializer(UserModelSerializer):
 
 class UserSpecialistModelSerializer(UserModelSerializer):
     """ User specialist model serializer """
-    profile = SpecialistModelSerializer(read_only=True)
+    specialist_user = SpecialistModelSerializer(read_only=True)
 
     class Meta(UserModelSerializer.Meta):
-        fields = UserModelSerializer.Meta.fields + ['profile']
+        fields = UserModelSerializer.Meta.fields + ['specialist_user']
 
 
 class UserAssistantModelSerializer(UserModelSerializer):
     """ User specialist model serializer """
-    profile = AssistantModelSerializer(read_only=True)
+    assistant_user = AssistantModelSerializer(read_only=True)
 
     class Meta(UserModelSerializer.Meta):
-        fields = UserModelSerializer.Meta.fields + ['profile']
+        fields = UserModelSerializer.Meta.fields + ['assistant_user']
