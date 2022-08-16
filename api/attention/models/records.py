@@ -64,10 +64,6 @@ class Record(ClinicModel):
         on_delete=models.SET_NULL
     )
 
-    actual_appointment_date = models.DateTimeField(
-        'appointment datetime',
-        null=True
-    )
     indications = models.CharField(
         max_length=255,
         help_text='specialist indications',
@@ -98,15 +94,9 @@ class Record(ClinicModel):
         choices=SURFACES
     )
 
-    patient = models.ForeignKey(
-        'attention.Patient',
+    appointment = models.OneToOneField(
+        'attention.Appointment',
         on_delete=models.CASCADE
-    )
-
-    specialist = models.ForeignKey(
-        'users.Specialist',
-        null=True,
-        on_delete=models.SET_NULL
     )
 
     tretment_performed = models.ForeignKey(
