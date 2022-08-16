@@ -23,3 +23,6 @@ class PatientModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = '__all__'
+    
+
+    

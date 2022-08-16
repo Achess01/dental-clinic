@@ -2,6 +2,8 @@
 
 # Django REST Framework
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 # Model
 from attention.models import Patient
@@ -18,8 +20,6 @@ class PatientViewSet(viewsets.ModelViewSet):
     serializer_class = PatientModelSerializer
     lookup_field = 'rut'
 
-
     def perform_destroy(self, instance):
         instance.is_active = False
         instance.save()
-
