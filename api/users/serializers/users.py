@@ -27,6 +27,49 @@ from .profiles import SpecialistModelSerializer, AssistantModelSerializer
 from utils.validators import rut_regex_validator, phone_regex_validator
 
 
+class InitialPasswordSerializer(serializers.Serializer):
+    """ Initial password serializer """
+    username = serializers.CharField(
+        validators=[rut_regex_validator()]
+    )
+    old_password = serializers.CharField(min_length=5, max_length=64)
+    password = serializers.CharField(min_length=5, max_length=64)
+    password_confirmation = serializers.CharField(min_length=5, max_length=64)
+
+    def validate(self, data):
+        """ Check credentials and if user changed given password """
+        user = authenticate(
+            username=data['username'],
+            password=data['old_password']
+        )
+        passwd = data['password']
+        passwd_conf = data['password_confirmation']
+
+        if not user:
+            raise serializers.ValidationError('Invalid credentials')
+        if not user.is_new_user:
+            raise serializers.ValidationError(
+                'You have already changed you initial password')
+
+        if passwd != passwd_conf:
+            raise serializers.ValidationError(
+                'Password and password confirmation don\'t match'
+            )
+
+        password_validation.validate_password(passwd)
+
+        self.context['user'] = user
+        return data
+
+    def create(self, data):
+        """ Change password"""
+        user = self.context['user']
+        user.set_password(data['password'])
+        user.is_new_user = False
+        user.save()
+        return {"message": "Password changed!"}
+
+
 class UserSignUpModelSerializer(serializers.ModelSerializer):
     """ Serializer for User Sign Up """
     username = serializers.CharField(
@@ -38,7 +81,7 @@ class UserSignUpModelSerializer(serializers.ModelSerializer):
 
     phone_number = serializers.CharField(
         validators=[phone_regex_validator()], max_length=17)
-   
+
     class Meta:
         model = User
         fields = [
@@ -51,13 +94,12 @@ class UserSignUpModelSerializer(serializers.ModelSerializer):
             'is_admin',
             'is_secretary',
             'is_assistant',
-            'is_specialist',            
+            'is_specialist',
         ]
 
     def create(self, validated_data):
         password = self.generate_user_password()
         self.context['raw_password'] = password
-        print(password)
         validated_data['password'] = password
         validated_data['is_new_user'] = True
         user = User.objects.create_user(**validated_data)
@@ -92,7 +134,7 @@ class UserLoginSerializer(serializers.Serializer):
         return data
 
     def create(self, validated_data):
-        token = Token.objects.get_or_create(user=self.context['user'])
+        token, created = Token.objects.get_or_create(user=self.context['user'])        
         return self.context['user'], token.key
 
 

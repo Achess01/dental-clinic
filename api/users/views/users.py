@@ -24,7 +24,8 @@ from users.serializers import (
     SecretarySignUpSerializer,
     AssistantSignUpSerializer,
     SpecialistSignUpSerializer,
-    AdminSignUpSerializer
+    AdminSignUpSerializer,
+    InitialPasswordSerializer,
 )
 
 
@@ -90,6 +91,14 @@ class UserViewSet(
             'token': token
         }
         return Response(data, status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=['post'])
+    def initial_password(self, request):
+        """ Password change for new users """
+        serializer = InitialPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.save()
+        return Response(data, status=status.HTTP_202_ACCEPTED)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
