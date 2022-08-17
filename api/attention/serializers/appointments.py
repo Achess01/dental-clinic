@@ -137,6 +137,5 @@ class AppointmentUpdateModelSerializer(serializers.ModelSerializer):
     """ Update appointment """
     class Meta:
         model = Appointment
-        fields = ['data', 'specialist']
-
-    # Validate for available hours (1 hour between appointments for specialist)
+        fields = ['date', 'specialist']
+    
