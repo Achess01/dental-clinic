@@ -11,7 +11,7 @@ from rest_framework.permissions import (
     IsAdminUser,
 )
 
-from users.permissions import IsSystemAdmin
+from users.permissions import IsClinicAdmin, IsClinicStaff
 
 
 # Models
@@ -34,16 +34,18 @@ from users.serializers import (
     SpecialistSignUpSerializer,
     AdminSignUpSerializer,
     InitialPasswordSerializer,
+    ChangeUserPasswordSerializer
 )
-from ..serializers.users import ChangeUserPasswordSerializer
 
 
 class UserViewSet(
+    mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
-    viewsets.GenericViewSet
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
 ):
-    queryset = User.objects.all()
+    queryset = User.objects.filter(is_active=True)
     serializer_class = UserModelSerializer
     lookup_field = 'username'
 
@@ -56,16 +58,19 @@ class UserViewSet(
         elif self.action in [
             'specialists', 'assistants',
             'secretaries',
-            'update', 'partial_update'
+            'update', 'partial_update',
+            'list', 'destroy'
         ]:
-            permissions += [IsAuthenticated, IsSystemAdmin]
+            permissions += [IsAuthenticated, IsClinicAdmin]
         elif self.action == 'retrieve':
-            permissions += [IsAuthenticated, IsSystemAdmin]
+            permissions += [IsAuthenticated, IsClinicAdmin]
+        elif self.action == 'getAllSpecialists':
+            permissions += [IsAuthenticated, IsClinicStaff]
 
         return [p() for p in permissions]
 
     @action(detail=False, methods=['post'], url_path="clinic-admin/signup")
-    def admin(self, request):
+    def admin(self, request, *args, **kwargs):
         """ Admin signup """
         serializer = AdminSignUpSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -74,7 +79,7 @@ class UserViewSet(
         return Response({"username": admin.username, "passowrd": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'], url_path="specialists/signup")
-    def specialists(self, request):
+    def specialists(self, request, *args, **kwargs):
         """ Specialist signup """
         serializer = SpecialistSignUpSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -83,7 +88,7 @@ class UserViewSet(
         return Response({"username": admin.username, "passowrd": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'], url_path="assistants/signup")
-    def assistants(self, request):
+    def assistants(self, request, *args, **kwargs):
         """ Assistant signup """
         serializer = AssistantSignUpSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -92,7 +97,7 @@ class UserViewSet(
         return Response({"username": admin.username, "passowrd": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'], url_path="secretaries/signup")
-    def secretaries(self, request):
+    def secretaries(self, request, *args, **kwargs):
         """ Secretary signup """
         serializer = SecretarySignUpSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -100,7 +105,7 @@ class UserViewSet(
         return Response({"username": admin.username, "passowrd": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'])
-    def login(self, request):
+    def login(self, request, *args, **kwargs):
         """ User login """
         serializer = UserLoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -119,7 +124,7 @@ class UserViewSet(
         return Response(data, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'])
-    def initial_password(self, request):
+    def initial_password(self, request, *args, **kwargs):
         """ Password change for new users """
         serializer = InitialPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -136,6 +141,12 @@ class UserViewSet(
         data = serializer.save()
         return Response(data, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['get'], url_path="specialists")
+    def getAllSpecialists(self, request, *args, **kwargs):
+        specialists = User.objects.filter(is_specialist=True)
+        serializer = UserSpecialistModelSerializer(specialists, many=True)
+        return Response(serializer.data)
+
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
@@ -145,3 +156,7 @@ class UserViewSet(
             serializer = UserAssistantModelSerializer(instance)
 
         return Response(serializer.data)
+
+    def perform_destroy(self, instance):
+        instance.is_active = False
+        instance.save()

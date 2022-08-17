@@ -17,6 +17,11 @@ from attention.serializers import (
     TreatmentPerformedModelSerializer
 )
 
+# Permissions
+from rest_framework.permissions import IsAuthenticated
+
+from users.permissions import IsClinicStaff, IsClinicAdmin
+
 
 class DiagnosticViewSet(viewsets.ModelViewSet):
     """ 
@@ -24,6 +29,14 @@ class DiagnosticViewSet(viewsets.ModelViewSet):
     """
     queryset = Diagnostic.objects.all()
     serializer_class = DiagnosticModelSerializer
+
+    def get_permissions(self):
+        permissions = [IsAuthenticated]
+        if self.action in ['retrieve', 'list']:
+            permissions += [IsClinicStaff]
+        else:
+            permissions += [IsClinicAdmin]
+        return [p() for p in permissions]
 
 
 class TreatmentViewSet(viewsets.ModelViewSet):
@@ -33,6 +46,14 @@ class TreatmentViewSet(viewsets.ModelViewSet):
     queryset = Treatment.objects.all()
     serializer_class = TreatmentModelSerializer
 
+    def get_permissions(self):
+        permissions = [IsAuthenticated]
+        if self.action in ['retrieve', 'list']:
+            permissions += [IsClinicStaff]
+        else:
+            permissions += [IsClinicAdmin]
+        return [p() for p in permissions]
+
 
 class TreatmentPerformedViewSet(viewsets.ModelViewSet):
     """ 
@@ -40,3 +61,12 @@ class TreatmentPerformedViewSet(viewsets.ModelViewSet):
     """
     queryset = TreatmentPerformed.objects.all()
     serializer_class = TreatmentPerformedModelSerializer
+
+
+    def get_permissions(self):
+        permissions = [IsAuthenticated]
+        if self.action in ['retrieve', 'list']:
+            permissions += [IsClinicStaff]
+        else:
+            permissions += [IsClinicAdmin]
+        return [p() for p in permissions]

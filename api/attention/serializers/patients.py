@@ -23,6 +23,18 @@ class PatientModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = '__all__'
-    
+        read_only_fields = ['is_active']
 
-    
+
+class PatientUpdateModelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Patient
+        fields = [
+            'first_name',
+            'last_name',
+            'birthday',
+            'age',
+            'ocuppation',
+            'address',
+        ]
