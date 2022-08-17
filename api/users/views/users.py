@@ -5,6 +5,14 @@ from rest_framework import status, viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+# Permissions
+from rest_framework.permissions import (
+    IsAuthenticated,
+    IsAdminUser,
+)
+
+from users.permissions import IsSystemAdmin
+
 
 # Models
 from users.models import (
@@ -27,6 +35,7 @@ from users.serializers import (
     AdminSignUpSerializer,
     InitialPasswordSerializer,
 )
+from ..serializers.users import ChangeUserPasswordSerializer
 
 
 class UserViewSet(
@@ -37,6 +46,20 @@ class UserViewSet(
     queryset = User.objects.all()
     serializer_class = UserModelSerializer
     lookup_field = 'username'
+
+    def get_permissions(self):
+        """ Assign permissions based on action """
+        permissions = []
+        if self.action in ['admin', 'reset_password']:
+            permissions += [IsAuthenticated, IsAdminUser]
+        elif self.action in [
+            'specialists', 'assistants',
+            'secretaries', 'retrieve'
+            'update', 'partial_update'
+        ]:
+            permissions += [IsAuthenticated, IsSystemAdmin]
+
+        return [p() for p in permissions]
 
     @action(detail=False, methods=['post'], url_path="clinic-admin/signup")
     def admin(self, request):
@@ -99,6 +122,16 @@ class UserViewSet(
         serializer.is_valid(raise_exception=True)
         data = serializer.save()
         return Response(data, status=status.HTTP_202_ACCEPTED)
+
+    @action(detail=True, methods=['post'])
+    def reset_password(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = ChangeUserPasswordSerializer(data=request.data)
+        serializer.context['request'] = request
+        serializer.context['user'] = user
+        serializer.is_valid(raise_exception=True)
+        data = serializer.save()
+        return Response(data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
