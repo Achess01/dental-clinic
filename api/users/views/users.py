@@ -49,14 +49,17 @@ class UserViewSet(
 
     def get_permissions(self):
         """ Assign permissions based on action """
+        print(self.action)
         permissions = []
         if self.action in ['admin', 'reset_password']:
             permissions += [IsAuthenticated, IsAdminUser]
         elif self.action in [
             'specialists', 'assistants',
-            'secretaries', 'retrieve'
+            'secretaries',
             'update', 'partial_update'
         ]:
+            permissions += [IsAuthenticated, IsSystemAdmin]
+        elif self.action == 'retrieve':
             permissions += [IsAuthenticated, IsSystemAdmin]
 
         return [p() for p in permissions]
@@ -138,9 +141,7 @@ class UserViewSet(
         serializer = self.get_serializer(instance)
         if instance.is_specialist:
             serializer = UserSpecialistModelSerializer(instance)
-            print(serializer)
-            return Response(serializer.data)
         if instance.is_assistant:
             serializer = UserAssistantModelSerializer(instance)
-            return Response(serializer.data)
+
         return Response(serializer.data)

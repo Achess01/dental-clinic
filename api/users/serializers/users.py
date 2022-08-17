@@ -113,10 +113,6 @@ class UserSignUpModelSerializer(serializers.ModelSerializer):
             'last_mother_name',
             'username',
             'phone_number',
-            'is_admin',
-            'is_secretary',
-            'is_assistant',
-            'is_specialist',
         ]
 
     def create(self, validated_data):
@@ -227,6 +223,15 @@ class UserModelSerializer(serializers.ModelSerializer):
             'is_secretary',
             'is_assistant',
             'is_specialist',
+            'is_staff',
+        ]
+
+        read_only_fields = [
+            'is_admin',
+            'is_secretary',
+            'is_assistant',
+            'is_specialist',
+            'is_staff',
         ]
 
 
