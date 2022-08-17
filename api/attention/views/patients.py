@@ -35,8 +35,11 @@ class PatientViewSet(viewsets.ModelViewSet):
         if self.action in ['retrieve', 'list']:
             permissions += [IsClinicStaff]
 
-        elif self.action in ['update', 'partial_update']:
+        elif self.action in ['update', 'partial_update', 'destroy']:
             permissions += [IsClinicAdmin]
+
+        elif self.action in ['create']:
+            permissions += [IsSecretary]
 
         return [p() for p in permissions]
 
