@@ -44,7 +44,7 @@ class UserViewSet(
         serializer.is_valid(raise_exception=True)
         admin = serializer.save()
         data = UserModelSerializer(admin).data
-        return Response({"username": admin.username, "passowrd": admin.password}, status=status.HTTP_201_CREATED)
+        return Response({"username": admin.username, "passowrd": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'], url_path="specialists/signup")
     def specialists(self, request):
@@ -53,7 +53,7 @@ class UserViewSet(
         serializer.is_valid(raise_exception=True)
         admin = serializer.save()
         data = UserSpecialistModelSerializer(admin).data
-        return Response({"username": admin.username, "passowrd": admin.password}, status=status.HTTP_201_CREATED)
+        return Response({"username": admin.username, "passowrd": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'], url_path="assistants/signup")
     def assistants(self, request):
@@ -62,7 +62,7 @@ class UserViewSet(
         serializer.is_valid(raise_exception=True)
         admin = serializer.save()
         data = UserAssistantModelSerializer(admin).data
-        return Response({"username": admin.username, "passowrd": admin.password}, status=status.HTTP_201_CREATED)
+        return Response({"username": admin.username, "passowrd": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'], url_path="secretaries/signup")
     def secretaries(self, request):
@@ -70,11 +70,30 @@ class UserViewSet(
         serializer = SecretarySignUpSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         admin = serializer.save()
-        return Response({"username": admin.username, "passowrd": admin.password}, status=status.HTTP_201_CREATED)
+        return Response({"username": admin.username, "passowrd": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=['post'])
+    def login(self, request):
+        """ User login """
+        serializer = UserLoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user, token = serializer.save()
+        if user.is_specialist:
+            user_data = UserSpecialistModelSerializer(user).data
+        elif user.is_assistant:
+            user_data = UserAssistantModelSerializer(user).data
+        else:
+            user_data = UserModelSerializer(user).data
+
+        data = {
+            'user': user_data,
+            'token': token
+        }
+        return Response(data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = self.get_serializer(instance)        
+        serializer = self.get_serializer(instance)
         if instance.is_specialist:
             serializer = UserSpecialistModelSerializer(instance)
             print(serializer)

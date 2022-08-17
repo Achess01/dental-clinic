@@ -38,7 +38,7 @@ class UserSignUpModelSerializer(serializers.ModelSerializer):
 
     phone_number = serializers.CharField(
         validators=[phone_regex_validator()], max_length=17)
-
+   
     class Meta:
         model = User
         fields = [
@@ -51,14 +51,17 @@ class UserSignUpModelSerializer(serializers.ModelSerializer):
             'is_admin',
             'is_secretary',
             'is_assistant',
-            'is_specialist',
+            'is_specialist',            
         ]
 
     def create(self, validated_data):
         password = self.generate_user_password()
+        self.context['raw_password'] = password
+        print(password)
         validated_data['password'] = password
         validated_data['is_new_user'] = True
-        return super().create(validated_data)
+        user = User.objects.create_user(**validated_data)
+        return user
 
     def generate_user_password(self):
         """ Generate random password for user """
@@ -84,6 +87,7 @@ class UserLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError('Invalid credentials')
         if user.is_new_user:
             raise serializers.ValidationError('You must change your password')
+
         self.context['user'] = user
         return data
 
@@ -176,7 +180,8 @@ class UserSecretaryModelSerializer(UserModelSerializer):
 
 class UserSpecialistModelSerializer(UserModelSerializer):
     """ User specialist model serializer """
-    profile = SpecialistModelSerializer(read_only=True, source="specialist_user")
+    profile = SpecialistModelSerializer(
+        read_only=True, source="specialist_user")
 
     class Meta(UserModelSerializer.Meta):
         fields = UserModelSerializer.Meta.fields + ['profile']
