@@ -14,6 +14,9 @@ class Specialist(ClinicModel):
     speciality = models.CharField(
         'speciality for Specialist user', max_length=150)
 
+    def __str__(self) -> str:
+        return f'{self.user} {self.speciality}'
+
 
 class Assistant(ClinicModel):
     """ Model Assistant """
@@ -22,8 +25,14 @@ class Assistant(ClinicModel):
     specialist = models.ForeignKey(
         Specialist, related_name='specialist', null=True, on_delete=models.SET_NULL)
 
+    def __str__(self) -> str:
+        return f'Assistant: {self.user}'
+
 
 class Secretary(ClinicModel):
     """ Model Secretary """
     user = models.OneToOneField(
-        'users.User', on_delete=models.CASCADE, related_name='secretary_user')    
+        'users.User', on_delete=models.CASCADE, related_name='secretary_user')
+
+    def __str__(self) -> str:
+        return f'Secretary: {self.user}'

@@ -25,8 +25,8 @@ class RecordViewSet(
     viewsets.GenericViewSet
 ):
     """ Record viewset """
-    serializer_class = RecordModelSerializer
     queryset = Record.objects.all()
+    serializer_class = RecordModelSerializer
 
 
 class NoAttendedRecordViewSet(
@@ -35,8 +35,8 @@ class NoAttendedRecordViewSet(
     viewsets.GenericViewSet
 ):
     """ Record viewset """
-    serializer_class = NoAttendedRecordModelSerializer
     queryset = NoAttendedRecord.objects.all()
+    serializer_class = NoAttendedRecordModelSerializer
 
 
 class LateRecordViewSet(
@@ -45,5 +45,5 @@ class LateRecordViewSet(
     viewsets.GenericViewSet
 ):
     """ Record viewset """
-    serializer_class = LateRecordModelSerializer
     queryset = LateRecord.objects.all()
+    serializer_class = LateRecordModelSerializer

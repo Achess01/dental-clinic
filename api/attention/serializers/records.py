@@ -10,16 +10,19 @@ from attention.models import (
     NoAttendedRecord
 )
 
+# Serializers
+from attention.serializers import AppointmentModelSerializer
+
 
 class RecordModelSerializer(serializers.ModelSerializer):
     """ Record model serializer """
+    appointment = AppointmentModelSerializer(read_only=True)
     class Meta:
-        model = Record,
+        model = Record
         fields = '__all__'
         read_only_fields = [
-            'patient',
-            'specialist',
-            'diagnostic_date'            
+            'appointment',            
+            'diagnostic_date'
         ]
 
 

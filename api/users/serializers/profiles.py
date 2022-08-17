@@ -19,3 +19,10 @@ class AssistantModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assistant
         fields = ['id', 'specialist']
+
+
+class SecretaryModelSerializer(serializers.ModelSerializer):
+    """ Secreatary model serializer """
+    class Meta:
+        model = Secretary
+        fields = ['id']

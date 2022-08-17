@@ -1,7 +1,9 @@
 """ Appointment views """
 
 # Django REST Framework
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
+from rest_framework.response import Response
+
 # Models
 from attention.models import Appointment
 
@@ -47,3 +49,5 @@ class AppointmentViewSet(
             return AppointmentUpdateModelSerializer
 
         return AppointmentModelSerializer
+    
+    

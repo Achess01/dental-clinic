@@ -21,7 +21,11 @@ from users.models import (
 )
 
 # Serializers
-from .profiles import SpecialistModelSerializer, AssistantModelSerializer
+from .profiles import (
+    SecretaryModelSerializer,
+    SpecialistModelSerializer,
+    AssistantModelSerializer
+)
 
 # Utils
 from utils.validators import rut_regex_validator, phone_regex_validator
@@ -237,8 +241,13 @@ class UserModelSerializer(serializers.ModelSerializer):
 
 class UserSecretaryModelSerializer(UserModelSerializer):
     """ User secialist model serializer """
+    profile = SecretaryModelSerializer(
+        read_only=True,
+        source='secretary_user'
+    )
+
     class Meta(UserModelSerializer.Meta):
-        pass
+        fields = UserModelSerializer.Meta.fields + ['profile']
 
 
 class UserSpecialistModelSerializer(UserModelSerializer):

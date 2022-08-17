@@ -106,4 +106,4 @@ class Record(ClinicModel):
     )
 
     def __str__(self) -> str:
-        return f'Patient: {self.patient} Specialist: {self.specialist}'
+        return f'{self.appointment}'
