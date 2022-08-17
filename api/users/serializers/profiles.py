@@ -6,6 +6,8 @@ from rest_framework import serializers
 # Models
 from users.models import Specialist, Assistant, Secretary
 
+# Serializers
+
 
 class SpecialistModelSerializer(serializers.ModelSerializer):
     """ Specialist model serializer """

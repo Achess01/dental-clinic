@@ -11,6 +11,7 @@ from attention.models import Appointment
 from attention.serializers import (
     AppointmentModelSerializer,
     AppointmentUpdateModelSerializer,
+    AppointmentCreateModelSerializer,
 )
 
 # Permissions
@@ -41,13 +42,21 @@ class AppointmentViewSet(
 
         elif self.action in ['update', 'partial_update', 'create']:
             permissions += [IsSecretary]
-        
+
         return [p() for p in permissions]
 
     def get_serializer_class(self):
         if self.action in ['update', 'partial_update']:
             return AppointmentUpdateModelSerializer
+        if self.action == 'create':
+            return AppointmentCreateModelSerializer
 
         return AppointmentModelSerializer
-    
-    
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.save()
+        appointment = AppointmentModelSerializer(data).data
+        headers = self.get_success_headers(appointment)
+        return Response(appointment, status=status.HTTP_201_CREATED, headers=headers)

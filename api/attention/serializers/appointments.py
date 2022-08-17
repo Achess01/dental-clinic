@@ -4,26 +4,72 @@
 from rest_framework import serializers
 
 # Models
-from attention.models import Appointment, Record
-from users.models import Secretary
+from attention.models import Appointment, Record, Patient
+from users.models import Secretary, Specialist, Assistant
 
 # Utilities
 from datetime import timedelta
 from django.utils import timezone
 
+# Serializers
+from .patients import PatientModelSerializer
+from users.serializers import UserModelSerializer
+
+""" Display specialists """
+
+
+class SpecialistDisplayModelSerializer(serializers.ModelSerializer):
+    """ Specialist model serializer """
+    user = UserModelSerializer(read_only=True)
+
+    class Meta:
+        model = Specialist
+        fields = '__all__'
+
+
+class AssistantDisplayModelSerializer(serializers.ModelSerializer):
+    """ Assistant model serializer """
+    user = UserModelSerializer(read_only=True)
+
+    class Meta:
+        model = Assistant
+        fields = '__all__'
+
+
+class SecretaryDisplayModelSerializer(serializers.ModelSerializer):
+    """ Secreatary model serializer """
+    user = UserModelSerializer(read_only=True)
+
+    class Meta:
+        model = Secretary
+        fields = '__all__'
+
 
 class AppointmentModelSerializer(serializers.ModelSerializer):
     """ Appointment Model Serializer """
+    specialist = SpecialistDisplayModelSerializer(read_only=True)
+    patient = PatientModelSerializer(read_only=True)
+    secretary = SecretaryDisplayModelSerializer(read_only=True)
+
     class Meta:
         model = Appointment
         fields = [
             'date',
             'specialist',
             'patient',
-            'secretary'
+            'secretary',
         ]
-
         read_only_fields = ['secretary']
+
+
+class AppointmentCreateModelSerializer(serializers.Serializer):
+    """ Appointment Model Serializer """
+    paid = serializers.BooleanField()
+    date = serializers.DateTimeField()
+    specialist = serializers.PrimaryKeyRelatedField(
+        queryset=Specialist.objects.all())
+    patient = serializers.PrimaryKeyRelatedField(
+        queryset=Patient.objects.all())
 
     def validate_date(self, value_date):
         """
@@ -73,11 +119,17 @@ class AppointmentModelSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """ Create a record too """
         user = self.context['request'].user
+        isPaid = validated_data['paid']
+        validated_data.pop('paid')
         secretary = Secretary.objects.get(user=user)
         validated_data['secretary'] = secretary
-        appointment = super().create(validated_data)
-        # paid?
-        Record.objects.create(appointment=appointment, vouche_state="PENDING")
+        print(validated_data)
+        appointment = Appointment.objects.create(**validated_data)
+        if isPaid:
+            voucher = "PAID"
+        else:
+            voucher = "PENDING"
+        Record.objects.create(appointment=appointment, vouche_state=voucher)
         return appointment
 
 
