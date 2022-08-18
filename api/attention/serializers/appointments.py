@@ -54,6 +54,7 @@ class AppointmentModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = [
+            'id',
             'date',
             'specialist',
             'patient',
@@ -73,7 +74,7 @@ class AppointmentCreateModelSerializer(serializers.Serializer):
 
     def validate_date(self, value_date):
         """
-            Verify date is not in the past            
+            Verify date is not in the past
         """
 
         # Only create appointments at least 30 minutes before
@@ -85,7 +86,7 @@ class AppointmentCreateModelSerializer(serializers.Serializer):
         return value_date
 
     def validate(self, data):
-        """ 
+        """
             The specialist is available,
             and the patient is available,
         """
@@ -123,7 +124,6 @@ class AppointmentCreateModelSerializer(serializers.Serializer):
         validated_data.pop('paid')
         secretary = Secretary.objects.get(user=user)
         validated_data['secretary'] = secretary
-        print(validated_data)
         appointment = Appointment.objects.create(**validated_data)
         if isPaid:
             voucher = "PAID"
@@ -137,5 +137,55 @@ class AppointmentUpdateModelSerializer(serializers.ModelSerializer):
     """ Update appointment """
     class Meta:
         model = Appointment
-        fields = ['date', 'specialist']
-    
+        fields = ['date']
+
+    def validate_date(self, value_date):
+        """
+            Verify date is not in the past            
+        """
+
+        # Only create appointments at least 30 minutes before
+        min_date = timezone.now() + timedelta(minutes=30)
+        if value_date < min_date:
+            raise serializers.ValidationError(
+                'Appointment must be changed at least 30 minutes before the new time'
+            )
+        return value_date
+
+    def validate(self, data):
+        """ 
+            The specialist is available,
+            and the patient is available,
+        """        
+        date = data['date']
+        min_date = date - timedelta(minutes=59)
+        max_date = date + timedelta(minutes=59)
+        min_change_date = timezone.now()
+
+        current_date = self.instance.date
+        patient = self.instance.patient
+        specialist = self.instance.specialist
+
+        if current_date <= min_change_date:
+            raise serializers.ValidationError(
+                'Cannot changed dates for late appointmens')
+
+        if Appointment.objects.filter(
+            date__gte=min_date,
+            date__lte=max_date,
+            patient=patient
+        ).exists():
+            raise serializers.ValidationError(
+                'This patient has already an appointment 1 hour near this appointment'
+            )
+
+        if Appointment.objects.filter(
+            date__gte=min_date,
+            date__lte=max_date,
+            specialist=specialist
+        ).exists():
+            raise serializers.ValidationError(
+                'This specialist has already an appointment 1 hour near this appointment'
+            )
+
+        return data

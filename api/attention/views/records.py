@@ -51,6 +51,7 @@ class NoAttendedRecordViewSet(
     """ Record viewset """
     queryset = NoAttendedRecord.objects.all()
     serializer_class = NoAttendedRecordModelSerializer
+    permission_classes = [IsAuthenticated, IsClinicStaff]
 
 
 class LateRecordViewSet(
@@ -61,3 +62,4 @@ class LateRecordViewSet(
     """ Record viewset """
     queryset = LateRecord.objects.all()
     serializer_class = LateRecordModelSerializer
+    permission_classes = [IsAuthenticated, IsClinicStaff]
