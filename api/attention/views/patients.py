@@ -22,6 +22,8 @@ from attention.permissions import (
     IsSpecialist,
 )
 
+# Filters
+from rest_framework import filters
 
 class PatientViewSet(viewsets.ModelViewSet):
     """ 
@@ -29,6 +31,8 @@ class PatientViewSet(viewsets.ModelViewSet):
     """
     queryset = Patient.objects.filter(is_active=True)
     lookup_field = 'rut'
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['rut', 'first_name', 'last_name']
 
     def get_permissions(self):
         permissions = [IsAuthenticated]
