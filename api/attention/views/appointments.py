@@ -1,6 +1,7 @@
 """ Appointment views """
 
 # Django REST Framework
+from dataclasses import fields
 from rest_framework import viewsets, mixins, status
 from rest_framework.response import Response
 
@@ -25,6 +26,13 @@ from attention.permissions import (
 )
 
 
+# Filtering
+from django_filters import rest_framework as filters
+from attention.filters import AppointmentFilterSet
+
+
+
+""" Views """
 class AppointmentViewSet(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
@@ -34,6 +42,8 @@ class AppointmentViewSet(
 ):
     """ Appointment View Set """
     queryset = Appointment.objects.all()
+    filter_backends = [filters.DjangoFilterBackend]  
+    filterset_class = AppointmentFilterSet  
 
     def get_permissions(self):
         permissions = [IsAuthenticated]

@@ -50,7 +50,7 @@ class UserViewSet(
     lookup_field = 'username'
 
     def get_permissions(self):
-        """ Assign permissions based on action """        
+        """ Assign permissions based on action """
         permissions = []
         if self.action in ['admin', 'reset_password']:
             permissions += [IsAuthenticated, IsAdminUser]
@@ -108,12 +108,12 @@ class UserViewSet(
         """ User login """
         serializer = UserLoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user, token = serializer.save()        
+        user, token = serializer.save()
         if user.is_specialist:
             user_data = UserSpecialistModelSerializer(user).data
         elif user.is_assistant:
             user_data = UserAssistantModelSerializer(user).data
-        elif user.is_secretary:            
+        elif user.is_secretary:
             user_data = UserSecretaryModelSerializer(user).data
         else:
             user_data = UserModelSerializer(user).data
@@ -155,7 +155,7 @@ class UserViewSet(
             serializer = UserSpecialistModelSerializer(instance)
         if instance.is_assistant:
             serializer = UserAssistantModelSerializer(instance)
-        elif instance.is_secretary:            
+        elif instance.is_secretary:
             serializer = UserSecretaryModelSerializer(instance)
 
         return Response(serializer.data)

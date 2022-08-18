@@ -22,6 +22,9 @@ from rest_framework.permissions import IsAuthenticated
 from attention.permissions import IsSpecialist, IsRecordSpecialist
 from users.permissions import IsClinicStaff
 
+# Filters
+from django_filters.rest_framework import DjangoFilterBackend
+from attention.filters import RecordFilterSet
 
 class RecordViewSet(
     mixins.RetrieveModelMixin,
@@ -32,6 +35,9 @@ class RecordViewSet(
     """ Record viewset """
     queryset = Record.objects.all()
     serializer_class = RecordModelSerializer
+    filter_backends = [DjangoFilterBackend]  
+    filterset_class = RecordFilterSet
+
 
     def get_permissions(self):
         permissions = [IsAuthenticated]
