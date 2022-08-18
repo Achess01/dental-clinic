@@ -17,11 +17,12 @@ from attention.serializers import AppointmentModelSerializer
 class RecordModelSerializer(serializers.ModelSerializer):
     """ Record model serializer """
     appointment = AppointmentModelSerializer(read_only=True)
+
     class Meta:
         model = Record
-        fields = '__all__'
+        exclude = ['created', 'modified']
         read_only_fields = [
-            'appointment',            
+            'appointment',
             'diagnostic_date'
         ]
 

@@ -17,6 +17,11 @@ from attention.models import (
     LateRecord
 )
 
+# Permissions
+from rest_framework.permissions import IsAuthenticated
+from attention.permissions import IsSpecialist, IsRecordSpecialist
+from users.permissions import IsClinicStaff
+
 
 class RecordViewSet(
     mixins.RetrieveModelMixin,
@@ -28,9 +33,18 @@ class RecordViewSet(
     queryset = Record.objects.all()
     serializer_class = RecordModelSerializer
 
+    def get_permissions(self):
+        permissions = [IsAuthenticated]
+        if self.action in ['update', 'partial_update']:
+            permissions += [IsSpecialist, IsRecordSpecialist]
+        else:
+            permissions += [IsClinicStaff]
+
+        return [p() for p in permissions]
+
 
 class NoAttendedRecordViewSet(
-    mixins.RetrieveModelMixin,    
+    mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):
@@ -40,7 +54,7 @@ class NoAttendedRecordViewSet(
 
 
 class LateRecordViewSet(
-    mixins.RetrieveModelMixin,    
+    mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):

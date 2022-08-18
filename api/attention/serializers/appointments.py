@@ -24,7 +24,7 @@ class SpecialistDisplayModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Specialist
-        fields = '__all__'
+        exclude = ['created', 'modified']
 
 
 class AssistantDisplayModelSerializer(serializers.ModelSerializer):
@@ -33,7 +33,7 @@ class AssistantDisplayModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Assistant
-        fields = '__all__'
+        exclude = ['created', 'modified']
 
 
 class SecretaryDisplayModelSerializer(serializers.ModelSerializer):
@@ -42,7 +42,7 @@ class SecretaryDisplayModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Secretary
-        fields = '__all__'
+        exclude = ['created', 'modified']
 
 
 class AppointmentModelSerializer(serializers.ModelSerializer):
