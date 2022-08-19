@@ -1,12 +1,13 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+/* App */
+import AppInput from "./components/AppInput";
+
+
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div className="App">
-      <h1 class="text-3xl font-bold underline">Hello world!</h1>
+    <div className="App">      
+      <AppInput label="Hola" type="password"/>
+      <AppInput label="Hola2" type="text"/>      
     </div>
   );
 }
