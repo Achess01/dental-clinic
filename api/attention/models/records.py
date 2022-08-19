@@ -82,7 +82,7 @@ class Record(ClinicModel):
         choices=ATTENDANCE_STATES
     )
 
-    vouche_state = models.CharField(
+    voucher_state = models.CharField(
         max_length=10,
         blank=True,
         choices=VOUCHER_STATES

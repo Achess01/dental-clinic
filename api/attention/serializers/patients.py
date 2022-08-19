@@ -35,6 +35,6 @@ class PatientUpdateModelSerializer(serializers.ModelSerializer):
             'last_name',
             'birthday',
             'age',
-            'ocuppation',
+            'occupation',
             'address',
         ]

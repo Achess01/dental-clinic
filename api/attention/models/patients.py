@@ -23,10 +23,10 @@ class Patient(ClinicModel):
     last_name = models.CharField('last name', max_length=150)
     birthday = models.DateField('patient birthday')
     age = models.PositiveSmallIntegerField('patient age')
-    ocuppation = models.CharField(
+    occupation = models.CharField(
         'patient occupation',
         max_length=255,
-        help_text='What is the ocuppation of the patient'
+        help_text='What is the occupation of the patient'
     )
     address = models.CharField('patient address', max_length=255)
     medical_history = models.CharField(

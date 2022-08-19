@@ -31,5 +31,9 @@ class Appointment(ClinicModel):
         on_delete=models.SET_NULL
     )
 
+    class Meta:
+        get_latest_by = 'date'
+        ordering = ['-date']
+
     def __str__(self) -> str:
         return f'{self.date} Patient: {self.patient} Specialist: {self.specialist}'

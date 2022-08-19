@@ -129,7 +129,7 @@ class AppointmentCreateModelSerializer(serializers.Serializer):
             voucher = "PAID"
         else:
             voucher = "PENDING"
-        Record.objects.create(appointment=appointment, vouche_state=voucher)
+        Record.objects.create(appointment=appointment, voucher_state=voucher)
         return appointment
 
 
