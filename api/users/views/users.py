@@ -34,8 +34,12 @@ from users.serializers import (
     SpecialistSignUpSerializer,
     AdminSignUpSerializer,
     InitialPasswordSerializer,
-    ChangeUserPasswordSerializer
+    ChangeUserPasswordSerializer,
+    SpecialistDateAvailableModelSerializer,
 )
+
+# Utilities
+from datetime import timedelta
 
 
 class UserViewSet(
@@ -144,7 +148,24 @@ class UserViewSet(
 
     @action(detail=False, methods=['get'], url_path="specialists")
     def getAllSpecialists(self, request, *args, **kwargs):
-        specialists = User.objects.filter(is_specialist=True)
+        specialists = self.get_queryset().filter(is_specialist=True)
+        date_param = {"date": request.query_params.get('date')}
+        if date_param['date'] is not None:
+            date_serializer = SpecialistDateAvailableModelSerializer(
+                data=date_param)
+            date_serializer.is_valid(raise_exception=True)
+            date = date_serializer.save()
+            min_date = date - timedelta(minutes=59)
+            max_date = date + timedelta(minutes=59)
+            """ 
+                Check if specialist has no appointments 
+                1 hour after or 1 hour before the date recieved
+            """
+
+            specialists = specialists.exclude(
+                specialist_user__appointment__date__range=[min_date, max_date],
+            )
+
         serializer = UserSpecialistModelSerializer(specialists, many=True)
         return Response(serializer.data)
 

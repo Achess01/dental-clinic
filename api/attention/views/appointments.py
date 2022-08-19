@@ -27,9 +27,9 @@ from attention.permissions import (
 
 
 # Filtering
-from django_filters import rest_framework as filters
+from django_filters.rest_framework import DjangoFilterBackend
 from attention.filters import AppointmentFilterSet
-
+from rest_framework import filters
 
 
 """ Views """
@@ -42,8 +42,9 @@ class AppointmentViewSet(
 ):
     """ Appointment View Set """
     queryset = Appointment.objects.all()
-    filter_backends = [filters.DjangoFilterBackend]  
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_class = AppointmentFilterSet  
+    ordering = ['date']
 
     def get_permissions(self):
         permissions = [IsAuthenticated]

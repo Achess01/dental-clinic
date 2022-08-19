@@ -9,6 +9,13 @@ from users.models import Specialist, Assistant, Secretary
 # Serializers
 
 
+class SpecialistDateAvailableModelSerializer(serializers.Serializer):
+    date = serializers.DateTimeField()
+
+    def create(self, validated_data):
+        return validated_data['date']
+
+
 class SpecialistModelSerializer(serializers.ModelSerializer):
     """ Specialist model serializer """
     class Meta:
