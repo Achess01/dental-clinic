@@ -1,12 +1,16 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 // Components
-import { AppButton, AppButtonDark, AppButtonSecondary } from "../components/AppButton";
+import {
+  AppButton,
+  AppButtonDark,
+  AppButtonSecondary,
+} from "../components/AppButton";
 import { AppInput, AppSelect } from "../components/AppInput";
 import { ErrorFieldForm as FormError } from "../components/ErrorFieldForm";
 
 export const CreatePersonalForm = (props) => {
-/* 
+  /* 
   This component accepts some custom props
   onSubmit: A function tha recieves an argument data
   assistant: Boolean to add extra fields for assistants
@@ -183,7 +187,7 @@ export const CreatePersonalForm = (props) => {
 
       {props.edit ? (
         <>
-          <AppButtonSecondary type="submit">Editar</AppButtonSecondary>          
+          <AppButtonSecondary type="submit">Editar</AppButtonSecondary>
           <AppButtonDark type="button">Cancelar</AppButtonDark>
         </>
       ) : (

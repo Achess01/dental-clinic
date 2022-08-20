@@ -2,7 +2,7 @@
   Form component to create and edit an appointment
  */
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 // Components
 import {
@@ -10,7 +10,12 @@ import {
   AppButtonDark,
   AppButtonSecondary,
 } from "../components/AppButton";
-import { AppInput, AppSelect, AppTextArea } from "../components/AppInput";
+import {
+  AppCheckbox,
+  AppInput,
+  AppSelect,
+  AppTextArea,
+} from "../components/AppInput";
 import { ErrorFieldForm as FormError } from "../components/ErrorFieldForm";
 
 export const AppointmentForm = (props) => {
@@ -21,6 +26,7 @@ export const AppointmentForm = (props) => {
   edit: If the form is used to edit data
   values: An object with values for each field when editing
 */
+  const [patientInfo, setPatientInfo] = useState("");
 
   const {
     register,
@@ -60,33 +66,7 @@ export const AppointmentForm = (props) => {
   }, [formState, reset]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <AppInput
-        label="Fecha y hora"
-        type="datetime-local"
-        register={register("date", {
-          required: true,
-        })}
-      />
-      {errors?.rut?.type === "required" && (
-        <FormError>Este campo es requerido</FormError>
-      )}
-
-      <AppSelect
-        disabled={props.edit ? true : false}
-        label="Especialista *"
-        register={register("specialist", {
-          validate: (value) => value != -1,
-        })}
-      >
-        <option value={-1}>----</option>
-        <option value={1}>Hola</option>
-        {/* Add options from api */}
-      </AppSelect>
-      {errors?.specialist?.type === "validate" && (
-        <FormError>Elija una opción válida</FormError>
-      )}
-
+    <>
       {!props.edit ? (
         <div className="d-flex align-items-start">
           <AppInput label="Buscar paciente" type="text" />
@@ -95,14 +75,63 @@ export const AppointmentForm = (props) => {
       ) : (
         <></>
       )}
-      {props.edit ? (
-        <>
-          <AppButtonSecondary type="submit">Editar</AppButtonSecondary>
-          <AppButtonDark type="button">Cancelar</AppButtonDark>
-        </>
-      ) : (
-        <AppButton type="submit">Registrar</AppButton>
-      )}
-    </form>
+      <h1>Registrar cita</h1>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <AppInput
+          hidden
+          readOnly
+          type="text"
+          register={register("patient", {
+            required: true,
+          })}
+        />
+
+        <AppInput readOnly label="Paciente" type="text" value={patientInfo} />
+        {errors?.patient?.type === "required" && (
+          <FormError>Se necesita un paciente</FormError>
+        )}
+
+        <AppInput
+          label="Fecha y hora *"
+          type="datetime-local"
+          register={register("date", {
+            required: true,
+          })}
+        />
+        {errors?.rut?.type === "required" && (
+          <FormError>Este campo es requerido</FormError>
+        )}
+
+        <AppSelect
+          disabled={props.edit ? true : false}
+          label="Especialista *"
+          register={register("specialist", {
+            validate: (value) => value != -1,
+          })}
+        >
+          <option value={-1}>----</option>
+          <option value={1}>Hola</option>
+          {/* Add options from api */}
+        </AppSelect>
+        {errors?.specialist?.type === "validate" && (
+          <FormError>Elija una opción válida</FormError>
+        )}
+
+        <AppCheckbox
+          label="Pagado"
+          readOnly={props.edit ? true : false}
+          register={register("paid")}
+        />
+
+        {props.edit ? (
+          <>
+            <AppButtonSecondary type="submit">Editar</AppButtonSecondary>
+            <AppButtonDark type="button">Cancelar</AppButtonDark>
+          </>
+        ) : (
+          <AppButton type="submit">Registrar</AppButton>
+        )}
+      </form>
+    </>
   );
 };
