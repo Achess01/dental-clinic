@@ -1,13 +1,11 @@
 /* App */
-import AppInput from "./components/AppInput";
-
-
+import React from "react";
+import { CreatePersonalForm } from "./Personal/CreatePersonal";
 
 function App() {
   return (
     <div className="App">      
-      <AppInput label="Hola" type="password"/>
-      <AppInput label="Hola2" type="text"/>      
+      <CreatePersonalForm edit/>
     </div>
   );
 }
