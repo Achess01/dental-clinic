@@ -1,14 +1,11 @@
 /* App */
 import React from "react";
-import { CreatePersonalForm } from "./personal/CreatePersonal";
-import { PatientForm } from "./patients/PatientForm";
-import { AppointmentForm } from "./patients/AppointmentForm";
-import { RecordForm } from "./patients/RecordForm";
+import { DiagnosticForm } from "./personal/CreateDiagnosticsForm";
 
 function App() {
   return (
     <div className="App">
-      <RecordForm />
+      <DiagnosticForm />
     </div>
   );
 }

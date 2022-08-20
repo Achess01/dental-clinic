@@ -179,7 +179,7 @@ export const PatientForm = (props) => {
       {props.edit ? (
         <>
           <AppButtonSecondary type="submit">Editar</AppButtonSecondary>
-          <AppButtonDark type="">Cancelar</AppButtonDark>
+          <AppButtonDark type="button">Cancelar</AppButtonDark>
         </>
       ) : (
         <AppButton type="submit">Registrar</AppButton>
