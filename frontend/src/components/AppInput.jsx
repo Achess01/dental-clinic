@@ -34,3 +34,20 @@ export const AppSelect = (props) => {
     </fieldset>
   );
 };
+
+export const AppTextArea = (props) => {
+  return (
+    <fieldset className="">
+      <label className="input-group-text" id="basic-addon1">
+        {props.label}
+      </label>
+      <textarea
+        {...props.register}
+        {...props}
+        className="form-control"
+        aria-label={props.label}
+        aria-describedby="basic-addon1"
+      />
+    </fieldset>
+  );
+};

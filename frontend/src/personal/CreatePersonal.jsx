@@ -9,8 +9,8 @@ export const CreatePersonalForm = (props) => {
 /* 
   This component accepts some custom props
   onSubmit: A function tha recieves an argument data
-  assistant: Extra fields for assistants
-  specialist: Extra fields for assistans
+  assistant: Boolean to add extra fields for assistants
+  specialist: Boolean to add extra fields for assistans
 
   edit: If the form is used to edit data
   values: An object with values for each field when editing
@@ -184,7 +184,7 @@ export const CreatePersonalForm = (props) => {
       {props.edit ? (
         <>
           <AppButtonSecondary type="submit">Editar</AppButtonSecondary>          
-          <AppButtonDark type="submit">Cancelar</AppButtonDark>
+          <AppButtonDark type="button">Cancelar</AppButtonDark>
         </>
       ) : (
         <AppButton type="submit">Registrar</AppButton>
