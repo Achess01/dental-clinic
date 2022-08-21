@@ -1,12 +1,12 @@
 import React from "react";
 import { Routes, Route, Navigate, Outlet } from "react-router";
-import { Link, BrowserRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 // Components
 import { Header } from "../components/Header";
 import { LoginForm as Login } from "../personal/Login";
 import { Welcome } from "../components/Welcome";
 
-import { CreatePersonalForm } from "../personal/CreatePersonal";
+import { useSelector } from "react-redux";
 
 const Error404 = (props) => {
   return (
@@ -29,14 +29,8 @@ const NoRoleUser = (props) => {
 };
 
 const AppRoutes = (props) => {
-  let user = {
-    firts_name: "hola",
-    // is_assistant: true,
-    // is_secretary: true,
-    // is_specialist: true,
-    // is_admin: true,
-    is_staff: true,
-  };
+  let user = useSelector((state) => state.user.user.user);
+  console.log(user);
 
   const redirectUser = (user) => {
     const requestUser = user;
@@ -65,7 +59,7 @@ const AppRoutes = (props) => {
   };
 
   return (
-    <BrowserRouter>
+    <>
       <Header user={user} />
       <Routes>
         <Route path="/" element={redirectUser(user)} />
@@ -151,7 +145,7 @@ const AppRoutes = (props) => {
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 };
 
