@@ -29,8 +29,7 @@ const NoRoleUser = (props) => {
 };
 
 const AppRoutes = (props) => {
-  let user = useSelector((state) => state.user.user.user);
-  console.log(user);
+  let user = useSelector((state) => state.user.user);
 
   const redirectUser = (user) => {
     const requestUser = user;

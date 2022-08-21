@@ -1,3 +1,5 @@
+const DOMAIN = "http://localhost:8000";
+
 export const USERS = "users";
 export const LOGIN = `${USERS}/login`;
 export const INITIAL_PASSWORD = `${USERS}/initial_password`;
@@ -11,7 +13,6 @@ export const signup = {
   secretaries: `${USERS}/secretaries/signup`,
 };
 
-const DOMAIN = "http://localhost:3000";
 
 const getEndpoint = (path) => {
   return `${DOMAIN}/${path}/`;

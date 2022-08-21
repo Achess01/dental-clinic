@@ -29,42 +29,34 @@ export const signUp = createAsyncThunk(
 export const login = createAsyncThunk("user/login", async ({ credentials }) => {
   const endpoint = getEndpoint(LOGIN);
   const response = await Axios.post(endpoint, {
-    credentials,
+    ...credentials,
   });
+
   return response.data;
 });
 
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    user: {
-      user: { is_admin: true },
-      token: "jijiji",
-    },
+    user: null,
     status: "",
   },
   reducers: {
     logOut: (state) => {
       state.user = null;
+      state.status = "";
+    },
+    clearStatus: (state) => {
+      state.status = "";
     },
   },
   extraReducers: {
-    [signUp.pending]: (state, action) => {
-      state.status = "loading";
-    },
-    [signUp.fulfilled]: (state, action) => {
-      state.user = action.payload;
-      state.status = "succes";
-    },
-    [signUp.rejected]: (state, action) => {
-      state.status = "failed";
-    },
     [login.pending]: (state, action) => {
       state.status = "loading";
     },
     [login.fulfilled]: (state, action) => {
       state.user = action.payload;
-      state.status = "succes";
+      state.status = "success";
     },
     [login.rejected]: (state, action) => {
       state.status = "failed";
@@ -72,6 +64,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { logOut } = userSlice.actions;
+export const { logOut, clearStatus } = userSlice.actions;
 
 export default userSlice.reducer;

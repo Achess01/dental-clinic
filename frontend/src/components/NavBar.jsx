@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+// Components 
+import { LogOutButton } from "../personal/LogOut";
 
 const NavBarItem = (props) => {
   return (
@@ -9,10 +11,6 @@ const NavBarItem = (props) => {
       </Link>
     </li>
   );
-};
-
-const LogOutButton = (props) => {
-  return <button className="nav-item btn bi bi-power text-white" />;
 };
 
 const NavBar = (props) => {
