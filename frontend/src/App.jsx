@@ -1,15 +1,9 @@
 /* App */
 import React from "react";
-import { Header } from "./components/Header";
-import { LoginForm } from "./personal/Login";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-  return (
-    <>
-      <Header />
-      <LoginForm />
-    </>
-  );
+  return <AppRoutes />;
 }
 
 export default App;
