@@ -2,7 +2,7 @@ import React from "react";
 
 export const AppButton = (props) => {
   return (
-    <button className="btn btn-primary m-1" {...props}>
+    <button className="btn btn-primary m-1 btn__clinic" {...props}>
       {props.children}
     </button>
   );

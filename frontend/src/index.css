@@ -1,0 +1,14 @@
+.root{
+  --primary-bg-color: #557C83;
+  --secondary-bg-color: #3AADA8;
+  --light-bg-color: #A2D5AC;
+  --lighter-bg-color: #E5EEC1;
+}
+
+.btn__clinic{
+  background-color: var(--secondary-bg-color);
+}
+
+.bg-dark{
+  background-color: var(--primary-bg-color);   
+}

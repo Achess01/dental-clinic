@@ -1,12 +1,14 @@
 /* App */
 import React from "react";
-import { DiagnosticForm } from "./personal/CreateDiagnosticsForm";
+import { Header } from "./components/Header";
+import { LoginForm } from "./personal/Login";
 
 function App() {
   return (
-    <div className="App">
-      <DiagnosticForm />
-    </div>
+    <>
+      <Header />
+      <LoginForm />
+    </>
   );
 }
 

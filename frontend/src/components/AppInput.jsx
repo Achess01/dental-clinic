@@ -7,9 +7,10 @@ export const AppInput = (props) => {
         <></>
       ) : (
         <label className="input-group-text" id="basic-addon1">
-          {props.label}
+          {props.icon ? <i className={props.icon}></i> : props.label}
         </label>
       )}
+
       <input
         {...props.register}
         {...props}
