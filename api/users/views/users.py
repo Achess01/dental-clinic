@@ -122,10 +122,9 @@ class UserViewSet(
         else:
             user_data = UserModelSerializer(user).data
 
-        data = {
-            'user': user_data,
-            'token': token
-        }
+        data = user_data
+        data['token'] = token
+        
         return Response(data, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'])
