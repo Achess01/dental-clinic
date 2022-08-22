@@ -23,3 +23,9 @@ class IsClinicStaff(BasePermission):
             user.is_secretary or
             user.is_assistant
         )
+
+
+class IsNotSuperObjAdmin(BasePermission):
+    """ To not delete superuser """
+    def has_object_permission(self, request, view, obj):
+        return not obj.is_staff 

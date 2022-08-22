@@ -11,7 +11,7 @@ from rest_framework.permissions import (
     IsAdminUser,
 )
 
-from users.permissions import IsClinicAdmin, IsClinicStaff
+from users.permissions import IsClinicAdmin, IsClinicStaff, IsNotSuperObjAdmin
 
 
 # Models
@@ -70,6 +70,9 @@ class UserViewSet(
         elif self.action == 'getAllSpecialists':
             permissions += [IsAuthenticated, IsClinicStaff]
 
+        if self.action in ['destroy', 'reset_password']:
+            permissions += [IsNotSuperObjAdmin]
+
         return [p() for p in permissions]
 
     @action(detail=False, methods=['post'], url_path="clinic-admin/signup")
@@ -124,7 +127,7 @@ class UserViewSet(
 
         data = user_data
         data['token'] = token
-        
+
         return Response(data, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'])

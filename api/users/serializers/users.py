@@ -73,7 +73,7 @@ class InitialPasswordSerializer(serializers.Serializer):
 
         if not user:
             raise serializers.ValidationError('Invalid credentials')
-        if not user.is_new_user:
+        if not user.is_new_user or user.is_staff:
             raise serializers.ValidationError(
                 'You have already changed you initial password')
 

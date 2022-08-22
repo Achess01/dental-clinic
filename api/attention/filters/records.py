@@ -9,7 +9,7 @@ from attention.models import Record
 class RecordFilterSet(filters.FilterSet):
     start = filters.DateTimeFilter(field_name='appointment__date', lookup_expr='gte')
     end = filters.DateTimeFilter(field_name='appointment__date', lookup_expr='lte')    
-    patient = filters.NumberFilter(field_name='appointment__patient')
+    patient = filters.CharFilter(field_name='appointment__patient__rut')
 
     class Meta:
         model = Record
