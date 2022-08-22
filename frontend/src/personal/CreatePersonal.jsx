@@ -28,11 +28,7 @@ export const CreatePersonalForm = (props) => {
     setValue,
   } = useForm();
 
-  const onSubmit =
-    props.onSubmit ||
-    function (data) {
-      console.log(data);
-    };
+  const onSubmit = props.onSubmit || function (data) {};
 
   useEffect(() => {
     if (props.values) {
@@ -47,7 +43,7 @@ export const CreatePersonalForm = (props) => {
     /* Reset form when submit is succesful*/
     if (formState.isSubmitSuccessful) {
       reset({
-        rut: "",
+        username: "",
         phone_number: "",
         first_name: "",
         second_name: "",
@@ -81,7 +77,7 @@ export const CreatePersonalForm = (props) => {
   const assistantFields = () => (
     <>
       <AppSelect
-        label="Especialidad *"
+        label="Especialista *"
         type="text"
         register={register("specialist", {
           validate: (value) => value != -1,
@@ -101,15 +97,15 @@ export const CreatePersonalForm = (props) => {
       <AppInput
         label="Rut (DPI/Pasaporte) *"
         type="text"
-        register={register("rut", {
+        register={register("username", {
           pattern: /^[a-zA-Z0-9]{9,13}$/,
           required: true,
         })}
       />
-      {errors?.rut?.type === "required" && (
+      {errors?.username?.type === "required" && (
         <FormError>Este campo es requerido</FormError>
       )}
-      {errors?.rut?.type === "pattern" && (
+      {errors?.username?.type === "pattern" && (
         <FormError>Solo dígitos y letras permitidas min: 9, max:13</FormError>
       )}
 

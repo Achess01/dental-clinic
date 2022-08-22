@@ -6,6 +6,7 @@ import { Header } from "../components/Header";
 import { LoginForm as Login } from "../personal/Login";
 import { Welcome } from "../components/Welcome";
 import { ChangePasswordForm } from "../personal/ChangeInitialPasswordView";
+import { PersonalView } from "../personal/PersonalView";
 
 // Redux
 import { useSelector } from "react-redux";
@@ -84,8 +85,8 @@ const AppRoutes = (props) => {
           {/* Staff routes */}
           <Route path="" element={<Welcome />} />
 
-          <Route path="personal" element={<NotImplemented />} />
-          <Route path="personal/:id" element={<NotImplemented />} />
+          <Route path="personal" element={<PersonalView />} />
+          <Route path="personal/:username" element={<NotImplemented />} />
 
           <Route path="diagnostics" element={<NotImplemented />} />
           <Route path="diagnostics/:id" element={<NotImplemented />} />

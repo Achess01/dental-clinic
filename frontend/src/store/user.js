@@ -1,30 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import Axios from "axios";
-import getEndpoint, { signup as signUpEndpoints, LOGIN } from "../config/api";
-
-export const signUp = createAsyncThunk(
-  "user/singUp",
-  async ({ credentials, userType }, thunkAPI) => {
-    let token, endpoint;
-    try {
-      token = thunkAPI.getState().user.user.token;
-    } catch {
-      return Promise.reject("No token found");
-    }
-
-    if (!token) return Promise.reject("No token found");
-    path = signUpEndpoints[userType];
-    if (!path) return Promise.reject("No path found");
-
-    const response = await Axios.post(`${getEndpoint(path)}`, credentials, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
-    return response;
-  }
-);
+import getEndpoint, { LOGIN } from "../config/api";
 
 export const login = createAsyncThunk("user/login", async ({ credentials }) => {
   const endpoint = getEndpoint(LOGIN);
