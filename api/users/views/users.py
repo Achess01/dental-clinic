@@ -79,7 +79,7 @@ class UserViewSet(
         serializer.is_valid(raise_exception=True)
         admin = serializer.save()
         data = UserModelSerializer(admin).data
-        return Response({"username": admin.username, "passowrd": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
+        return Response({"username": admin.username, "password": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'], url_path="specialists/signup")
     def specialists(self, request, *args, **kwargs):
@@ -88,7 +88,7 @@ class UserViewSet(
         serializer.is_valid(raise_exception=True)
         admin = serializer.save()
         data = UserSpecialistModelSerializer(admin).data
-        return Response({"username": admin.username, "passowrd": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
+        return Response({"username": admin.username, "password": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'], url_path="assistants/signup")
     def assistants(self, request, *args, **kwargs):
@@ -97,7 +97,7 @@ class UserViewSet(
         serializer.is_valid(raise_exception=True)
         admin = serializer.save()
         data = UserAssistantModelSerializer(admin).data
-        return Response({"username": admin.username, "passowrd": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
+        return Response({"username": admin.username, "password": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'], url_path="secretaries/signup")
     def secretaries(self, request, *args, **kwargs):
@@ -105,7 +105,7 @@ class UserViewSet(
         serializer = SecretarySignUpSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         admin = serializer.save()
-        return Response({"username": admin.username, "passowrd": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
+        return Response({"username": admin.username, "password": serializer.context['raw_password']}, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'])
     def login(self, request, *args, **kwargs):
