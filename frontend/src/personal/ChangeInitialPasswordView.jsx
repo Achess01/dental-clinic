@@ -27,7 +27,12 @@ export const ChangePasswordForm = (props) => {
     }
     setLoading(true);
     const response = await changeInitialPassword(data);
-    if (!response) setError(true);
+    if (!response) {
+      setError(true);
+    } else {
+      setError(false);
+      alert("Se ha cambiado su contraseña");
+    }
     setLoading(false);
     if (formState.isSubmitSuccessful && !error) {
       reset({

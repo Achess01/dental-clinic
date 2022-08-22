@@ -9,6 +9,8 @@ import {
 import { AppInput, AppSelect } from "../components/AppInput";
 import { ErrorFieldForm as FormError } from "../components/ErrorFieldForm";
 
+import { useNavigate } from "react-router-dom";
+
 export const CreatePersonalForm = (props) => {
   /* 
   This component accepts some custom props
@@ -28,7 +30,10 @@ export const CreatePersonalForm = (props) => {
     setValue,
   } = useForm();
 
+  const navigate = useNavigate();
+
   const onSubmit = props.onSubmit || function (data) {};
+  const specialists = props.specialists || [];
 
   useEffect(() => {
     if (props.values) {
@@ -84,6 +89,11 @@ export const CreatePersonalForm = (props) => {
         })}
       >
         <option value={-1}>----</option>
+        {specialists.map((s, index) => (
+          <option value={s.profile.id} key={index}>
+            {s.username} - {s.first_name} {s.last_name} - {s.profile.speciality}
+          </option>
+        ))}
         {/* Add options from api */}
       </AppSelect>
       {errors?.specialist?.type === "validate" && (
@@ -184,7 +194,9 @@ export const CreatePersonalForm = (props) => {
       {props.edit ? (
         <>
           <AppButtonSecondary type="submit">Editar</AppButtonSecondary>
-          <AppButtonDark type="button">Cancelar</AppButtonDark>
+          <AppButtonDark type="button" onClick={(e) => navigate(-1)}>
+            Cancelar
+          </AppButtonDark>
         </>
       ) : (
         <AppButton type="submit">Registrar</AppButton>

@@ -53,9 +53,39 @@ export const getUsers = async (token) => {
   }
 };
 
+export const updateUser = async ({ username, token, data }) => {
+  try {
+    const response = await Axios.patch(
+      `${getEndpoint(USERS)}${username}/`,
+      data,
+      {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (e) {
+    return null;
+  }
+};
+
 export const getUser = async ({ username, token }) => {
   try {
     const response = await Axios.get(`${getEndpoint(USERS)}${username}/`, {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    return null;
+  }
+};
+
+export const getSpecialists = async (token) => {
+  try {
+    const response = await Axios.get(getEndpoint(SPECIALISTS), {
       headers: {
         Authorization: `Token ${token}`,
       },

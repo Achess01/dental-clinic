@@ -15,7 +15,7 @@ import { ErrorFieldForm } from "../components/ErrorFieldForm";
 import { useSelector } from "react-redux";
 
 // Api
-import { getUsers, signUpUser } from "../config/api";
+import { getUsers, signUpUser, getSpecialists } from "../config/api";
 
 export const PersonalView = (props) => {
   const [type, setType] = useState("secretaries");
@@ -27,7 +27,10 @@ export const PersonalView = (props) => {
   const [error, setError] = useState(false);
   const [userData, setUserData] = useState({});
 
+  const [specialists, setSpecialists] = useState([]);
+
   const user = useSelector((state) => state.user.user);
+
   const onSubmit = async (data) => {
     setLoadingSignUp(true);
     const response = await signUpUser({ data, type, token: user.token });
@@ -41,9 +44,19 @@ export const PersonalView = (props) => {
   };
 
   useEffect(() => {
-    if (type === "assistants") {
-      // Get all specialists
-    }
+    const allSpecialists = async () => {
+      if (type === "assistants") {
+        // Get all specialists
+        setLoadingSignUp(true);
+        const response = await getSpecialists(user.token);
+        if (response) {
+          setSpecialists(response);
+        }
+        setLoadingSignUp(false);
+      }
+    };
+
+    allSpecialists();
   }, [type]);
 
   useEffect(() => {
@@ -57,7 +70,7 @@ export const PersonalView = (props) => {
     };
 
     usersFromApi();
-  }, []);
+  }, [userData]);
 
   const createNewUser = () => (
     <>
@@ -90,6 +103,7 @@ export const PersonalView = (props) => {
           onSubmit={onSubmit}
           assistant={type === "assistants"}
           specialist={type === "specialists"}
+          specialists={specialists}
         />
       )}
       {error && (
@@ -110,23 +124,43 @@ export const PersonalView = (props) => {
     </>
   );
 
+  const getColors = (user) => {
+    if (user.is_staff) return "table-primary";
+    if (user.is_admin) return "table-secondary";
+    if (user.is_specialist) return "table-success";
+    if (user.is_assistant) return "table-info";
+    if (user.is_secretary) return "table-warning";
+    return "";
+  };
+
+  const getRole = (user) =>{
+    if (user.is_staff) return "Super";
+    if (user.is_admin) return "Administrador";
+    if (user.is_specialist) return "Especialista";
+    if (user.is_assistant) return "Asistente";
+    if (user.is_secretary) return "Secretaria/o";
+    return "";
+  }
+
   const TableUsers = (usuarios) => (
     <table className="table">
       <thead>
         <tr>
           <th scope="col">#</th>
           <th scope="col">Rut</th>
-          <th scope="col">Número de teléfono</th>
+          <th scope="col">Teléfono</th>
           <th scope="col">Nombre</th>
+          <th scope="col">Rol</th>
         </tr>
       </thead>
       <tbody>
         {usuarios.map((u, index) => (
-          <tr key={index}>
+          <tr key={index} className={getColors(u)}>
             <th scope="row">{index + 1}</th>
             <td>{u.username}</td>
             <td>{u.phone_number}</td>
             <td>{`${u.first_name} ${u.last_name}`}</td>
+            <td>{getRole(u)}</td>
             <td>
               <Link to={u.username}>Editar</Link>
             </td>
