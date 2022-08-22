@@ -12,6 +12,9 @@ import {
 import { AppInput, AppSelect, AppTextArea } from "../components/AppInput";
 import { ErrorFieldForm as FormError } from "../components/ErrorFieldForm";
 
+// React router
+import { useNavigate } from "react-router";
+
 export const PatientForm = (props) => {
   /* 
   This component accepts some custom props
@@ -29,6 +32,8 @@ export const PatientForm = (props) => {
     reset,
     setValue,
   } = useForm();
+
+  const navigate = useNavigate();
 
   /* If a submit function is not provided */
   const onSubmit =
@@ -138,7 +143,7 @@ export const PatientForm = (props) => {
       )}
 
       <AppTextArea
-        label="Ocupación *"        
+        label="Ocupación *"
         register={register("occupation", {
           maxLength: 255,
           required: true,
@@ -152,7 +157,7 @@ export const PatientForm = (props) => {
       )}
 
       <AppTextArea
-        label="Dirección *"        
+        label="Dirección *"
         register={register("address", {
           maxLength: 255,
           required: true,
@@ -167,7 +172,7 @@ export const PatientForm = (props) => {
 
       <AppTextArea
         readOnly={props.edit ? true : false}
-        label="Historia médica"        
+        label="Historia médica"
         register={register("medical_history", {
           maxLength: 255,
         })}
@@ -179,7 +184,9 @@ export const PatientForm = (props) => {
       {props.edit ? (
         <>
           <AppButtonSecondary type="submit">Editar</AppButtonSecondary>
-          <AppButtonDark type="button">Cancelar</AppButtonDark>
+          <AppButtonDark type="button" onClick={(e) => navigate(-1)}>
+            <i class="bi bi-door-open"></i>
+          </AppButtonDark>
         </>
       ) : (
         <AppButton type="submit">Registrar</AppButton>

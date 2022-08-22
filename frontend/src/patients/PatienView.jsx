@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 // Components
 import { PatientForm } from "./PatientForm";
 import { SmallContainer } from "../components/Container";
-import { AppSelect } from "../components/AppInput";
 import { AppButtonSecondary, AppButtonDark } from "../components/AppButton";
 import { Spinner } from "../components/Spinner";
 import { ErrorFieldForm } from "../components/ErrorFieldForm";
@@ -15,44 +14,36 @@ import { ErrorFieldForm } from "../components/ErrorFieldForm";
 import { useSelector } from "react-redux";
 
 // Api
-import { getPatients } from "../config/api";
+import { getPatients, signUpPatient } from "../config/api";
 
-export const PersonalView = (props) => {
+// Router
+import { useNavigate } from "react-router-dom";
+
+export const PatientView = (props) => {
   const [create, setCreate] = useState(false);
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingSignUp, setLoadingSignUp] = useState(false);
 
   const [error, setError] = useState(false);
+
+  const [fetch, setFetch] = useState(false);
+
+  const navigate = useNavigate();
 
   const user = useSelector((state) => state.user.user);
 
   const onSubmit = async (data) => {
     setLoadingSignUp(true);
-    const response = await signUpUser({ data, type, token: user.token });
+    const response = await signUpPatient({ data, token: user.token });
     setLoadingSignUp(false);
     if (!response) {
       setError(true);
     } else {
-      setUserData(response);
       setError(false);
+      navigate(-1);
     }
   };
-
-  useEffect(() => {
-    const allSpecialists = async () => {
-      if (type === "assistants") {
-        // Get all specialists
-        setLoadingSignUp(true);
-        const response = await getSpecialists(user.token);
-        if (response) {
-          setSpecialists(response);
-        }
-        setLoadingSignUp(false);
-      }
-    };
-
-    allSpecialists();
-  }, [type]);
 
   useEffect(() => {
     const patientsFromApi = async () => {
@@ -65,81 +56,61 @@ export const PersonalView = (props) => {
     };
 
     patientsFromApi();
-  }, [userData]);
+  }, [fetch]);
 
-  const createNewUser = () => (
+  const createForm = () => (
     <>
       <AppButtonSecondary
         onClick={(e) => {
           setCreate(false);
           setError(false);
-          setUserData({});
         }}
       >
-        X
+        <i className="bi bi-chevron-up"></i>
       </AppButtonSecondary>
-      <h3>Agregar personal</h3>
-      <div>
-        <AppSelect
-          label="Tipo de usuario"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-        >
-          <option value="secretaries">Secretaria/o</option>
-          <option value="specialists">Especialista</option>
-          <option value="assistants">Asistente</option>
-          {user.is_staff && <option value="admins">Administrador</option>}
-        </AppSelect>
-      </div>
-      {loadingSignUp ? (
-        <Spinner />
-      ) : (
-        <PatientForm
-          onSubmit={onSubmit}
-          assistant={type === "assistants"}
-          specialist={type === "specialists"}
-          specialists={specialists}
-        />
-      )}
+      <h3>Agregar pacientes</h3>
+      {loadingSignUp ? <Spinner /> : <PatientForm onSubmit={onSubmit} />}
       {error && (
         <ErrorFieldForm>
-          Error al crear el usuario, verifique que el rut no sea repetido
+          Error al crear el paciente, verifique que el rut no sea repetido
         </ErrorFieldForm>
       )}
-
-      <div className="card mb-5 mt-3">
-        <ul className="list-group list-group-flush">
-          {Object.entries(userData).map((data, index) => (
-            <li className="list-group-item" key={index}>
-              {data[0]}: {data[1]}
-            </li>
-          ))}
-        </ul>
-      </div>
     </>
   );
 
-  const TablePatients = (patients) => (
-    <table className="table">
+  const table = (patients) => (
+    <table className="table mt-5">
       <thead>
+        <tr>
+          <th scope="col">
+            <AppButtonDark onClick={(e) => setFetch(!fetch)}>
+              <i className="bi bi-arrow-repeat"></i>
+            </AppButtonDark>
+          </th>
+        </tr>
         <tr>
           <th scope="col">#</th>
           <th scope="col">Rut</th>
-          <th scope="col">Teléfono</th>
           <th scope="col">Nombre</th>
-          <th scope="col">Rol</th>
+          <th scope="col">Nacimiento</th>
+          <th scope="col">Edad</th>
         </tr>
       </thead>
       <tbody>
         {patients.map((u, index) => (
-          <tr key={index} className={getColors(u)}>
+          <tr key={index}>
             <th scope="row">{index + 1}</th>
-            <td>{u.username}</td>
-            <td>{u.phone_number}</td>
+            <td>{u.rut}</td>
             <td>{`${u.first_name} ${u.last_name}`}</td>
-            <td>{getRole(u)}</td>
+            <td>{u.birthday}</td>
+            <td>{u.age}</td>
+            {(user.is_admin || user.is_staff) && (
+              <td>
+                <Link to={u.rut}>Editar</Link>
+              </td>
+            )}
             <td>
-              <Link to={u.username}>Editar</Link>
+              <Link to={`${u.rut}/records`}>records</Link>
             </td>
           </tr>
         ))}
@@ -150,11 +121,13 @@ export const PersonalView = (props) => {
   return (
     <SmallContainer>
       <div className="d-flex flex-column align-items-center justify-content-center m-5">
-        <AppButtonDark onClick={(e) => setCreate(true)}>
-          Agregar personal
-        </AppButtonDark>
-        {create && createNewUser()}
-        {loading ? <Spinner /> : TablePatients(patients)}
+        {user.is_secretary && (
+          <AppButtonDark onClick={(e) => setCreate(true)}>
+            <i className="bi bi-file-earmark-plus-fill">Nuevo</i>
+          </AppButtonDark>
+        )}
+        {create && createForm()}
+        {loading ? <Spinner /> : table(patients)}
       </div>
     </SmallContainer>
   );

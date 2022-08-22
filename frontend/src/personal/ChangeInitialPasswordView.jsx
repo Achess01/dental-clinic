@@ -34,14 +34,12 @@ export const ChangePasswordForm = (props) => {
       alert("Se ha cambiado su contraseña");
     }
     setLoading(false);
-    if (formState.isSubmitSuccessful) {
-      reset({
-        username: "",
-        old_password: "",
-        password: "",
-        password_confirmation: "",
-      });
-    }
+    reset({
+      username: "",
+      old_password: "",
+      password: "",
+      password_confirmation: "",
+    });
   };
 
   return (

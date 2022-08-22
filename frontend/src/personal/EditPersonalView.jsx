@@ -75,6 +75,11 @@ export const EditPersonalView = (props) => {
           second_name: response.second_name,
           last_name: response.last_name,
           last_mother_name: response.last_mother_name,
+          is_admin: response.is_admin,
+          is_assistant: response.is_assistant,
+          is_secretary: response.is_secretary,
+          is_specialist: response.is_specialist,
+          is_staff: response.is_staff,
         };
         setUserData(data);
       } else {
@@ -90,8 +95,10 @@ export const EditPersonalView = (props) => {
     <>
       <h3>Editar personal</h3>
       <div className="m-3">
-        <AppButtonDanger onClick={deleteUser}>Eliminar</AppButtonDanger>
-        {user.is_staff && (
+        {!userData.is_staff && (
+          <AppButtonDanger onClick={deleteUser}>Eliminar</AppButtonDanger>
+        )}
+        {user.is_staff && !userData.is_staff && (
           <AppButtonDark onClick={resetUserPassword}>
             Resetear password
           </AppButtonDark>

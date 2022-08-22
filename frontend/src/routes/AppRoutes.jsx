@@ -9,6 +9,10 @@ import { ChangePasswordForm } from "../personal/ChangeInitialPasswordView";
 import { PersonalView } from "../personal/PersonalView";
 import { EditPersonalView } from "../personal/EditPersonalView";
 
+import { PatientView } from "../patients/PatienView";
+import { EditPatientView } from "../patients/EditPatientView";
+import { PatientRecordsView } from "../patients/PatientRecordsView";
+
 // Redux
 import { useSelector } from "react-redux";
 
@@ -100,12 +104,9 @@ const AppRoutes = (props) => {
 
           <Route path="appointments" element={<NotImplemented />} />
 
-          <Route path="patients" element={<NotImplemented />} />
-          <Route path="patients/:patient" element={<NotImplemented />} />
-          <Route
-            path="patients/:patient/records"
-            element={<NotImplemented />}
-          />
+          <Route path="patients" element={<PatientView />} />
+          <Route path="patients/:id" element={<EditPatientView />} />
+          <Route path="patients/:id/records" element={<PatientRecordsView />} />
           <Route path="records" element={<NotImplemented />} />
         </Route>
 
@@ -117,10 +118,7 @@ const AppRoutes = (props) => {
           <Route path="" element={<Welcome />} />
           <Route path="appointments" element={<NotImplemented />} />
           <Route path="patients" element={<NotImplemented />} />
-          <Route
-            path="patients/:patient/records"
-            element={<NotImplemented />}
-          />
+          <Route path="patients/:id/records" element={<NotImplemented />} />
         </Route>
 
         <Route
@@ -131,10 +129,7 @@ const AppRoutes = (props) => {
           <Route path="" element={<Welcome />} />
           <Route path="appointments" element={<NotImplemented />} />
           <Route path="patients" element={<NotImplemented />} />
-          <Route
-            path="patients/:patient/records"
-            element={<NotImplemented />}
-          />
+          <Route path="patients/:id/records" element={<NotImplemented />} />
         </Route>
 
         <Route
@@ -145,10 +140,7 @@ const AppRoutes = (props) => {
           <Route path="" element={<Welcome />} />
           <Route path="appointments" element={<NotImplemented />} />
           <Route path="patients" element={<NotImplemented />} />
-          <Route
-            path="patients/:patient/records"
-            element={<NotImplemented />}
-          />
+          <Route path="patients/:id/records" element={<NotImplemented />} />
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>
