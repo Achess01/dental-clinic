@@ -4,13 +4,20 @@ import React, { useState, useEffect } from "react";
 import { CreatePersonalForm } from "./CreatePersonal";
 import { SmallContainer } from "../components/Container";
 import { Spinner } from "../components/Spinner";
-import { useParams, useNavigate } from "react-router-dom";
+import { AppButtonDanger, AppButtonDark } from "../components/AppButton";
 
 // Redux
 import { useSelector } from "react-redux";
 
 // Api
-import { getUser, updateUser } from "../config/api";
+import {
+  getUser,
+  updateUser,
+  resetPassword,
+  deleteUser as deleteUserAPI,
+} from "../config/api";
+
+import { useParams, useNavigate } from "react-router-dom";
 
 export const EditPersonalView = (props) => {
   const [loading, setLoading] = useState(false);
@@ -29,6 +36,31 @@ export const EditPersonalView = (props) => {
     }
 
     navigate("../personal");
+  };
+
+  const resetUserPassword = async (e) => {
+    let choice = confirm("¿Desea resetear la contraseña de este usuario?");
+    if (choice) {
+      const response = await resetPassword({ username, token: user.token });
+      if (!response) {
+        alert("Error");
+      } else {
+        alert(`La nueva contraseña es ${response["new_password"]}`);
+      }
+    }
+  };
+
+  const deleteUser = async (e) => {
+    let choice = confirm("¿Desea ELIMINAR este usuario?");
+    if (choice) {
+      const response = await deleteUserAPI({ username, token: user.token });
+      if (!response) {
+        alert("Error");
+      } else {
+        alert(`Usuario eliminado`);
+        navigate("../personal");
+      }
+    }
   };
 
   useEffect(() => {
@@ -57,6 +89,14 @@ export const EditPersonalView = (props) => {
   const editUser = () => (
     <>
       <h3>Editar personal</h3>
+      <div className="m-3">
+        <AppButtonDanger onClick={deleteUser}>Eliminar</AppButtonDanger>
+        {user.is_staff && (
+          <AppButtonDark onClick={resetUserPassword}>
+            Resetear password
+          </AppButtonDark>
+        )}
+      </div>
       <CreatePersonalForm onSubmit={onSubmit} values={userData} edit />
     </>
   );

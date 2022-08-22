@@ -195,7 +195,7 @@ export const CreatePersonalForm = (props) => {
         <>
           <AppButtonSecondary type="submit">Editar</AppButtonSecondary>
           <AppButtonDark type="button" onClick={(e) => navigate(-1)}>
-            Cancelar
+            X
           </AppButtonDark>
         </>
       ) : (

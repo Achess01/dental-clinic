@@ -4,7 +4,7 @@ const DOMAIN = "http://localhost:8000";
 export const USERS = "users";
 export const LOGIN = `${USERS}/login`;
 export const INITIAL_PASSWORD = `${USERS}/initial_password`;
-export const RESET_PASSWORD = `${USERS}/reset_password`;
+export const RESET_PASSWORD = `reset_password`;
 export const SPECIALISTS = `${USERS}/specialists`;
 
 export const signup = {
@@ -16,6 +16,38 @@ export const signup = {
 
 const getEndpoint = (path) => {
   return `${DOMAIN}/${path}/`;
+};
+
+export const deleteUser = async ({ username, token }) => {
+  try {
+    const endpoint = getEndpoint(USERS) + `${username}/`;
+    const response = await Axios.delete(endpoint, {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
+    return response.status;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const resetPassword = async ({ username, token }) => {
+  try {
+    const endpoint = getEndpoint(USERS) + `${username}/${RESET_PASSWORD}/`;
+    const response = await Axios.post(
+      endpoint,
+      {},
+      {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return null;
+  }
 };
 
 export const signUpUser = async ({ data, type, token }) => {

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 // Components
-import { CreatePersonalForm } from "./CreatePersonal";
+import { PatientForm } from "./PatientForm";
 import { SmallContainer } from "../components/Container";
 import { AppSelect } from "../components/AppInput";
 import { AppButtonSecondary, AppButtonDark } from "../components/AppButton";
@@ -15,19 +15,14 @@ import { ErrorFieldForm } from "../components/ErrorFieldForm";
 import { useSelector } from "react-redux";
 
 // Api
-import { getUsers, signUpUser, getSpecialists } from "../config/api";
+import { getPatients } from "../config/api";
 
 export const PersonalView = (props) => {
-  const [type, setType] = useState("secretaries");
   const [create, setCreate] = useState(false);
-  const [usuarios, setUsuarios] = useState([]);
+  const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const [loadingSignUp, setLoadingSignUp] = useState(false);
   const [error, setError] = useState(false);
-  const [userData, setUserData] = useState({});
-
-  const [specialists, setSpecialists] = useState([]);
 
   const user = useSelector((state) => state.user.user);
 
@@ -60,16 +55,16 @@ export const PersonalView = (props) => {
   }, [type]);
 
   useEffect(() => {
-    const usersFromApi = async () => {
+    const patientsFromApi = async () => {
       setLoading(true);
-      const response = await getUsers(user.token);
+      const response = await getPatients(user.token);
       if (response !== null) {
-        setUsuarios(response);
+        setPatients(response);
       }
       setLoading(false);
     };
 
-    usersFromApi();
+    patientsFromApi();
   }, [userData]);
 
   const createNewUser = () => (
@@ -99,7 +94,7 @@ export const PersonalView = (props) => {
       {loadingSignUp ? (
         <Spinner />
       ) : (
-        <CreatePersonalForm
+        <PatientForm
           onSubmit={onSubmit}
           assistant={type === "assistants"}
           specialist={type === "specialists"}
@@ -124,25 +119,7 @@ export const PersonalView = (props) => {
     </>
   );
 
-  const getColors = (user) => {
-    if (user.is_staff) return "table-primary";
-    if (user.is_admin) return "table-secondary";
-    if (user.is_specialist) return "table-success";
-    if (user.is_assistant) return "table-info";
-    if (user.is_secretary) return "table-warning";
-    return "";
-  };
-
-  const getRole = (user) => {
-    if (user.is_staff) return "Super";
-    if (user.is_admin) return "Administrador";
-    if (user.is_specialist) return "Especialista";
-    if (user.is_assistant) return "Asistente";
-    if (user.is_secretary) return "Secretaria/o";
-    return "";
-  };
-
-  const TableUsers = (usuarios) => (
+  const TablePatients = (patients) => (
     <table className="table">
       <thead>
         <tr>
@@ -154,7 +131,7 @@ export const PersonalView = (props) => {
         </tr>
       </thead>
       <tbody>
-        {usuarios.map((u, index) => (
+        {patients.map((u, index) => (
           <tr key={index} className={getColors(u)}>
             <th scope="row">{index + 1}</th>
             <td>{u.username}</td>
@@ -177,7 +154,7 @@ export const PersonalView = (props) => {
           Agregar personal
         </AppButtonDark>
         {create && createNewUser()}
-        {loading ? <Spinner /> : TableUsers(usuarios)}
+        {loading ? <Spinner /> : TablePatients(patients)}
       </div>
     </SmallContainer>
   );

@@ -17,7 +17,7 @@ export const ChangePasswordForm = (props) => {
     handleSubmit,
     reset,
     formState,
-    formState: { errors },
+    formState: { errors, isSubmitSuccessful },
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -34,7 +34,7 @@ export const ChangePasswordForm = (props) => {
       alert("Se ha cambiado su contraseña");
     }
     setLoading(false);
-    if (formState.isSubmitSuccessful && !error) {
+    if (formState.isSubmitSuccessful) {
       reset({
         username: "",
         old_password: "",
