@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// Components 
+// Components
 import { LogOutButton } from "../personal/LogOut";
 
 const NavBarItem = (props) => {
@@ -29,7 +29,9 @@ export const StaffNavBar = (props) => {
       <NavBarItem to="staff/patients">Pacientes</NavBarItem>
       <NavBarItem to="staff/diagnostics">Diagnosticos</NavBarItem>
       <NavBarItem to="staff/treatments">Tratamientos</NavBarItem>
-      <NavBarItem to="staff/treatments-performed">Tratamientos realizados</NavBarItem>
+      <NavBarItem to="staff/treatments-performed">
+        Tratamientos realizados
+      </NavBarItem>
       <LogOutButton />
     </NavBar>
   );
@@ -70,5 +72,10 @@ export const SecretaryNavBar = (props) => {
 };
 
 export const NoUserNavBar = (props) => {
-  return <NavBar></NavBar>;
+  return (
+    <NavBar>
+      <NavBarItem to="/login">Login</NavBarItem>
+      <NavBarItem to="/change-initial-password">Cambiar contraseña</NavBarItem>
+    </NavBar>
+  );
 };

@@ -5,7 +5,9 @@ import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
 import { LoginForm as Login } from "../personal/Login";
 import { Welcome } from "../components/Welcome";
+import { ChangePasswordForm } from "../personal/ChangeInitialPasswordView";
 
+// Redux
 import { useSelector } from "react-redux";
 
 const Error404 = (props) => {
@@ -62,6 +64,10 @@ const AppRoutes = (props) => {
       <Header user={user} />
       <Routes>
         <Route path="/" element={redirectUser(user)} />
+        <Route
+          path="/change-initial-password"
+          element={user ? redirectUser(user) : <ChangePasswordForm />}
+        />
         <Route path="/login" element={user ? redirectUser(user) : <Login />} />
         <Route path="/no-role" element={<NoRoleUser />} />
 

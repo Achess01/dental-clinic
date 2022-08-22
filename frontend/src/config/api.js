@@ -1,5 +1,6 @@
-const DOMAIN = "http://localhost:8000";
+import Axios from "axios";
 
+const DOMAIN = "http://localhost:8000";
 export const USERS = "users";
 export const LOGIN = `${USERS}/login`;
 export const INITIAL_PASSWORD = `${USERS}/initial_password`;
@@ -13,9 +14,17 @@ export const signup = {
   secretaries: `${USERS}/secretaries/signup`,
 };
 
-
 const getEndpoint = (path) => {
   return `${DOMAIN}/${path}/`;
+};
+
+export const changeInitialPassword = async (data) => {
+  try {
+    const response = await Axios.post(getEndpoint(INITIAL_PASSWORD), data);
+    return response;
+  } catch (e) {
+    return null;
+  }
 };
 
 export default getEndpoint;

@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import { SmallContainer } from "../components/Container";
+//Hooks
 import { useForm } from "react-hook-form";
 // Components
+import { SmallContainer } from "../components/Container";
 import { AppButtonDark } from "../components/AppButton";
 import { AppInput } from "../components/AppInput";
 import { ErrorFieldForm as FormError } from "../components/ErrorFieldForm";
