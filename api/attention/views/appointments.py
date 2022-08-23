@@ -45,7 +45,7 @@ class AppointmentViewSet(
     viewsets.GenericViewSet
 ):
     """ Appointment View Set """
-    queryset = Appointment.objects.filter(date__gte=timezone.now())
+    queryset = Appointment.objects.all()
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_class = AppointmentFilterSet
     ordering = ['date']
