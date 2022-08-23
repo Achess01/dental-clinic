@@ -1,7 +1,9 @@
 """ Appointment views """
 
+# Django
+from django.utils import timezone
+
 # Django REST Framework
-from dataclasses import fields
 from rest_framework import viewsets, mixins, status
 from rest_framework.response import Response
 
@@ -33,6 +35,8 @@ from rest_framework import filters
 
 
 """ Views """
+
+
 class AppointmentViewSet(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
@@ -41,9 +45,9 @@ class AppointmentViewSet(
     viewsets.GenericViewSet
 ):
     """ Appointment View Set """
-    queryset = Appointment.objects.all()
+    queryset = Appointment.objects.filter(date__gte=timezone.now())
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_class = AppointmentFilterSet  
+    filterset_class = AppointmentFilterSet
     ordering = ['date']
 
     def get_permissions(self):
