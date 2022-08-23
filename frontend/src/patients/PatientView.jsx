@@ -109,7 +109,7 @@ export const PatientView = (props) => {
               </td>
             )}
             <td>
-              <Link to={`${u.rut}/records`}>records</Link>
+              <Link to={`${u.rut}/records`}>Fichas</Link>
             </td>
           </tr>
         ))}

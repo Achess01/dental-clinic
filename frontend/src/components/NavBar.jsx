@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 // Components
 import { LogOutButton } from "../personal/LogOut";
+// redux
 
 const NavBarItem = (props) => {
   return (

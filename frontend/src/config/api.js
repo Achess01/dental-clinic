@@ -11,7 +11,21 @@ export const PATIENTS = "patients";
 
 export const RECORDS = "records";
 
+export const ATTENTION_TYPES = `${RECORDS}/attention_types`;
+export const ATTENDANCE_STATES = `${RECORDS}/attendance_states`;
+export const VOUCHER_STATES = `${RECORDS}/voucher_states`;
+export const SURFACES = `${RECORDS}/surfaces`;
+
+const NO_ATTENDED_RECORDS = "no-attended-records";
+const LATE_RECORDS = "late-records";
+
 export const APPOINTMENTS = "appointments";
+
+export const DIAGNOSTICS = "diagnostics";
+
+export const TREATMENTS = "treatments";
+
+export const TREATMENTS_PERFORMED = "treatments-performed";
 
 export const signup = {
   admins: `${USERS}/clinic-admin/signup`,
@@ -52,7 +66,7 @@ const deleteGeneric = async ({ id, token, path }) => {
   }
 };
 
-const getAllGeneric = async ({ token, path }) => {
+export const getAllGeneric = async ({ token, path }) => {
   try {
     const endpoint = getEndpoint(path);
     const response = await Axios.get(endpoint, {
@@ -166,8 +180,12 @@ export const signUpAppointment = async ({ data, token }) => {
   return await signUpGeneric({ data, token, path: APPOINTMENTS });
 };
 
-export const getAppointments = async (token) => {
-  return await getAllGeneric({ token, path: APPOINTMENTS });
+export const getAppointments = async (token, params = {}) => {
+  const base_path = APPOINTMENTS + "?";
+  const path = Object.entries(params).reduce((prev, current) => {
+    return `${prev}${current[0]}=${current[1]}&`;
+  }, base_path);
+  return await getAllGeneric({ token, path });
 };
 
 export const updateAppointment = async ({ id, token, data }) => {
@@ -188,6 +206,14 @@ export const getRecords = async ({ token, params }) => {
   }, base_path);
 
   return await getAllGeneric({ token, path: queries });
+};
+
+export const getRecord = async ({ id, token }) => {
+  return await getGeneric({ id, token, path: RECORDS });
+};
+
+export const updateRecord = async ({ id, token, data }) => {
+  return await updateGeneric({ id, token, data, path: RECORDS });
 };
 
 export default getEndpoint;

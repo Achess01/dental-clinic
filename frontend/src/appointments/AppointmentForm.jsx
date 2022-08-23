@@ -31,7 +31,7 @@ export const AppointmentForm = (props) => {
   edit: If the form is used to edit data
   values: An object with values for each field when editing  
 */
-  const [patientInfo, setPatientInfo] = useState("");
+  const [patientInfo, setPatientInfo] = useState(props.info || "");
   const [loading, setLoading] = useState(false);
   const [querySearch, setQuerySearch] = useState("");
   const [patients, setPatients] = useState([]);
@@ -53,15 +53,19 @@ export const AppointmentForm = (props) => {
   /* If a submit function is not provided */
   const onSubmit = props.onSubmit || function (data) {};
 
-  /* Update field values */
-  useEffect(() => {
+  const setValues = () => {
     if (props.values) {
       let vals = Object.entries(props.values);
       for (let val of vals) {
         setValue(val[0], val[1]);
       }
     }
-  }, [props.values]);
+  };
+
+  /* Update field values */
+  useEffect(() => {
+    setValues();
+  }, [props.values, specialists]);
 
   useEffect(() => {
     /* Reset form when submit is succesful*/
@@ -198,7 +202,7 @@ export const AppointmentForm = (props) => {
 
         <AppCheckbox
           label="Pagado"
-          readOnly={props.edit ? true : false}
+          hidden={props.edit ? true : false}
           register={register("paid")}
         />
 

@@ -18,6 +18,7 @@ export const EditAppointmentView = (props) => {
   const [loading, setLoading] = useState(false);
   const [appointmentData, setAppointmentData] = useState({});
   const { id } = useParams();
+  const [patientInfo, setPatientInfo] = useState("");
 
   const navigate = useNavigate();
 
@@ -40,9 +41,18 @@ export const EditAppointmentView = (props) => {
       const response = await getAppointment({ id, token: user.token });
       if (response !== null) {
         const date = new Date(response.date);
-        //response["date"] = date.toLocaleDateString(); Format date
-        console.log(response);
-        setAppointmentData(response);
+
+        const data = {
+          date: date.toISOString().replace("Z", ""),
+          specialist: response.specialist.id,
+          patient: response.patient.id,
+        };
+
+        setPatientInfo(
+          `${response.patient.rut} ${response.patient.first_name} ${response.patient.last_name}`
+        );
+
+        setAppointmentData(data);
       } else {
         return;
       }
@@ -55,7 +65,13 @@ export const EditAppointmentView = (props) => {
   const edit = () => (
     <>
       <h3>Editar cita</h3>
-      <FormEdit onSubmit={onSubmit} values={appointmentData} edit />
+      <FormEdit
+        onSubmit={onSubmit}
+        values={appointmentData}
+        user={user}
+        info={patientInfo}
+        edit
+      />
     </>
   );
 

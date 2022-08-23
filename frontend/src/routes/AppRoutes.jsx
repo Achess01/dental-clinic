@@ -15,6 +15,8 @@ import { PatientRecordsView } from "../patients/PatientRecordsView";
 
 import { AppointmentView } from "../appointments/AppointmentView";
 import { EditAppointmentView } from "../appointments/EditAppointmentView";
+import { SpecialistAppointmentsView } from "../appointments/SpecialistAppointmentsView";
+import { EditRecordView } from "../records/EditRecordView";
 
 // Redux
 import { useSelector } from "react-redux";
@@ -70,7 +72,7 @@ const AppRoutes = (props) => {
 
   return (
     <>
-      <Header user={user} />
+      <Header />
       <Routes>
         <Route path="/" element={redirectUser(user)} />
         <Route
@@ -120,9 +122,10 @@ const AppRoutes = (props) => {
         >
           {/* Assistant routes */}
           <Route path="" element={<Welcome />} />
-          <Route path="appointments" element={<NotImplemented />} />
-          <Route path="patients" element={<NotImplemented />} />
-          <Route path="patients/:id/records" element={<NotImplemented />} />
+          <Route path="appointments" element={<AppointmentView />} />
+
+          <Route path="patients" element={<PatientView />} />
+          <Route path="patients/:id/records" element={<PatientRecordsView />} />
         </Route>
 
         <Route
@@ -146,9 +149,11 @@ const AppRoutes = (props) => {
         >
           {/* Specialist routes */}
           <Route path="" element={<Welcome />} />
-          <Route path="appointments" element={<NotImplemented />} />
-          <Route path="patients" element={<NotImplemented />} />
-          <Route path="patients/:id/records" element={<NotImplemented />} />
+          <Route path="appointments" element={<SpecialistAppointmentsView />} />
+          <Route path="appointments/:id/record" element={<EditRecordView />} />
+
+          <Route path="patients" element={<PatientView />} />
+          <Route path="patients/:id/records" element={<PatientRecordsView />} />
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>
