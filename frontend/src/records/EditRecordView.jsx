@@ -33,10 +33,12 @@ export const EditRecordView = (props) => {
         const patientResponse = response.appointment.patient;
         const data = {
           attention_type: response.attention_type,
-          treatment: response.treatment,
-          treated_piece: response.treated_piece,
+          treatment: response.treatment ? response.treatment.id : "",
+          treated_piece: response.treated_piece
+            ? response.treated_piece.id
+            : "",
           tretment_performed: response.tretment_performed,
-          diagnostic: response.diagnostic,
+          diagnostic: response.diagnostic ? response.diagnostic.id : "",
           indications: response.indications,
           notes: response.notes,
           attendance_state: response.attendance_state,

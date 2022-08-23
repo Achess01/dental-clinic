@@ -24,9 +24,16 @@ export const RecordCard = ({ record }) => {
             {specialist.speciality})
           </li>
           <li className="list-group-item">Fecha: {date.toLocaleString()}</li>
-          <li className="list-group-item text-muted">
-            Registrado por: {secretary.user.username}{" "}
-            {secretary.user.first_name} {secretary.user.last_name}
+          <li className="list-group-item">
+            Diagnostico: {record.diagnostic?.name} - {" "}
+            {record.diagnostic?.description}
+          </li>
+          <li className="list-group-item">
+            Tratamiento: {record.treatment?.name} - {record.treatment?.description}
+          </li>
+          <li className="list-group-item">
+            Tratamiento realizado: {record.tretment_performed?.name} - {" "}
+            {record.tretment_performed?.description}
           </li>
           <li className="list-group-item ">
             Asistencia: {record.attendance_state}

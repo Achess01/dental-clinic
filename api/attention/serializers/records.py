@@ -5,6 +5,7 @@ from django.utils import timezone
 
 # Django REST Framework
 from rest_framework import serializers
+from attention.filters import appointments
 
 # Models
 from attention.models import (
@@ -16,6 +17,12 @@ from ..models.appointments import Appointment
 
 # Serializers
 from attention.serializers import AppointmentModelSerializer
+from .diagnostics import (
+    DiagnosticModelSerializer,
+    TreatmentModelSerializer,
+    TreatmentPerformedModelSerializer
+)
+from .appointments import AppointmentModelSerializer
 
 
 class RecordCreateModelSerializer(serializers.ModelSerializer):
@@ -24,6 +31,26 @@ class RecordCreateModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Record
         fields = '__all__'
+
+
+class RecordRetrieveModelSerializer(serializers.ModelSerializer):
+    """ List record """
+    diagnostic = DiagnosticModelSerializer(read_only=True)
+    treatment = TreatmentModelSerializer(read_only=True)
+    tretment_performed = TreatmentPerformedModelSerializer(read_only=True)
+    appointment = AppointmentModelSerializer(read_only=True)
+
+    class Meta:
+        model = Record
+        exclude = ['created', 'modified']
+        read_only_fields = [
+            'appointment',
+            'diagnostic_date'
+            'diagnostic',
+            'treatment',
+            'tretment_performed',
+            'id'
+        ]
 
 
 class RecordModelSerializer(serializers.ModelSerializer):

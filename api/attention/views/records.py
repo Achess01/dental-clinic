@@ -9,7 +9,8 @@ from rest_framework.response import Response
 from attention.serializers import (
     RecordModelSerializer,
     NoAttendedRecordModelSerializer,
-    LateRecordModelSerializer
+    LateRecordModelSerializer,
+    RecordRetrieveModelSerializer
 )
 
 # Models
@@ -37,9 +38,13 @@ class RecordViewSet(
 ):
     """ Record viewset """
     queryset = Record.objects.all()
-    serializer_class = RecordModelSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = RecordFilterSet
+
+    def get_serializer_class(self):
+        if self.action in ['retrieve', 'list']:            
+            return RecordRetrieveModelSerializer
+        return RecordModelSerializer
 
     def get_permissions(self):
         permissions = [IsAuthenticated]
