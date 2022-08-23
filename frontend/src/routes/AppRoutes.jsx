@@ -8,6 +8,7 @@ import { Welcome } from "../components/Welcome";
 import { ChangePasswordForm } from "../personal/ChangeInitialPasswordView";
 import { PersonalView } from "../personal/PersonalView";
 import { EditPersonalView } from "../personal/EditPersonalView";
+import { ReportsView } from "../personal/ReportsView";
 
 import { PatientView } from "../patients/PatientView";
 import { EditPatientView } from "../patients/EditPatientView";
@@ -105,6 +106,8 @@ const AppRoutes = (props) => {
         >
           {/* Staff routes */}
           <Route path="" element={<Welcome />} />
+
+          <Route path="reports" element={<ReportsView />} />
 
           <Route path="personal" element={<PersonalView />} />
           <Route path="personal/:username" element={<EditPersonalView />} />

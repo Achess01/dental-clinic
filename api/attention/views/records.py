@@ -97,6 +97,8 @@ class NoAttendedRecordViewSet(
     queryset = NoAttendedRecord.objects.all()
     serializer_class = NoAttendedRecordModelSerializer
     permission_classes = [IsAuthenticated, IsClinicStaff]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = RecordFilterSet
 
 
 class LateRecordViewSet(
@@ -108,3 +110,5 @@ class LateRecordViewSet(
     queryset = LateRecord.objects.all()
     serializer_class = LateRecordModelSerializer
     permission_classes = [IsAuthenticated, IsClinicStaff]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = RecordFilterSet

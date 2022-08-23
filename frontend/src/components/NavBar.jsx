@@ -25,6 +25,7 @@ const NavBar = (props) => {
 export const StaffNavBar = (props) => {
   return (
     <NavBar>
+      <NavBarItem to="staff/reports">Reportes</NavBarItem>
       <NavBarItem to="staff/personal">Personal</NavBarItem>
       <NavBarItem to="staff/appointments">Citas</NavBarItem>
       <NavBarItem to="staff/patients">Pacientes</NavBarItem>

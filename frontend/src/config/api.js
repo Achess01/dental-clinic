@@ -198,6 +198,26 @@ export const getAppointment = async ({ id, token }) => {
 
 // Records
 
+export const getLateRecords = async ({ token, params }) => {
+  const query_params = params || {};
+  const base_path = LATE_RECORDS + "?";
+  const queries = Object.entries(query_params).reduce((prev, current) => {
+    return `${prev}${current[0]}=${current[1]}&`;
+  }, base_path);
+
+  return await getAllGeneric({ token, path: queries });
+};
+
+export const getNoAttendedRecords = async ({ token, params }) => {
+  const query_params = params || {};
+  const base_path = NO_ATTENDED_RECORDS + "?";
+  const queries = Object.entries(query_params).reduce((prev, current) => {
+    return `${prev}${current[0]}=${current[1]}&`;
+  }, base_path);
+
+  return await getAllGeneric({ token, path: queries });
+};
+
 export const getRecords = async ({ token, params }) => {
   const query_params = params || {};
   const base_path = RECORDS + "?";
