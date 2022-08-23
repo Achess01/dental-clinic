@@ -38,7 +38,7 @@ const getEndpoint = (path) => {
   return `${DOMAIN}/${path}/`;
 };
 
-const signUpGeneric = async ({ data, token, path }) => {
+export const signUpGeneric = async ({ data, token, path }) => {
   try {
     const endpoint = getEndpoint(path);
     const response = await Axios.post(endpoint, data, {
@@ -80,7 +80,7 @@ export const getAllGeneric = async ({ token, path }) => {
   }
 };
 
-const updateGeneric = async ({ id, token, data, path }) => {
+export const updateGeneric = async ({ id, token, data, path }) => {
   try {
     const endpoint = `${getEndpoint(path)}${id}/`;
     const response = await Axios.patch(endpoint, data, {
@@ -94,7 +94,7 @@ const updateGeneric = async ({ id, token, data, path }) => {
   }
 };
 
-const getGeneric = async ({ id, token, path }) => {
+export const getGeneric = async ({ id, token, path }) => {
   try {
     const endpoint = `${getEndpoint(path)}${id}/`;
     const response = await Axios.get(endpoint, {

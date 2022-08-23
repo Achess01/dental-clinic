@@ -12,6 +12,9 @@ import {
 import { AppInput, AppTextArea } from "../components/AppInput";
 import { ErrorFieldForm as FormError } from "../components/ErrorFieldForm";
 
+//Router
+import { useNavigate } from "react-router-dom";
+
 export const DiagnosticForm = (props) => {
   /* 
     This component accepts some custom props
@@ -20,6 +23,8 @@ export const DiagnosticForm = (props) => {
     edit: If the form is used to edit data
     values: An object with values for each field when editing
   */
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -31,11 +36,7 @@ export const DiagnosticForm = (props) => {
   } = useForm();
 
   /* If a submit function is not provided */
-  const onSubmit =
-    props.onSubmit ||
-    function (data) {
-      console.log(data);
-    };
+  const onSubmit = props.onSubmit || function (data) {};
 
   /* Update field values */
   useEffect(() => {
@@ -91,7 +92,9 @@ export const DiagnosticForm = (props) => {
       {props.edit ? (
         <>
           <AppButtonSecondary type="submit">Editar</AppButtonSecondary>
-          <AppButtonDark type="button">Cancelar</AppButtonDark>
+          <AppButtonDark type="button" onClick={(e) => navigate(-1)}>
+            <i className="bi bi-door-open"></i>
+          </AppButtonDark>
         </>
       ) : (
         <AppButton type="submit">Registrar</AppButton>

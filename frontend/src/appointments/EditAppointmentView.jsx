@@ -40,10 +40,9 @@ export const EditAppointmentView = (props) => {
       setLoading(true);
       const response = await getAppointment({ id, token: user.token });
       if (response !== null) {
-        const date = new Date(response.date);
-
+        const date = response.date.replace("-06:00", "");
         const data = {
-          date: date.toISOString().replace("Z", ""),
+          date: date,
           specialist: response.specialist.id,
           patient: response.patient.id,
         };

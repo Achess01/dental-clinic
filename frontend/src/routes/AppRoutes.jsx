@@ -18,6 +18,17 @@ import { EditAppointmentView } from "../appointments/EditAppointmentView";
 import { SpecialistAppointmentsView } from "../appointments/SpecialistAppointmentsView";
 import { EditRecordView } from "../records/EditRecordView";
 
+import {
+  DiagnosticView,
+  TreatmentView,
+  TreatmentPerformedView,
+} from "../diagnostics/DiagnosticView";
+import {
+  EditDiagnosticView,
+  EditTreatmentView,
+  EditTreatmentPerformedView,
+} from "../diagnostics/EditDiagnosticView";
+
 // Redux
 import { useSelector } from "react-redux";
 
@@ -98,22 +109,26 @@ const AppRoutes = (props) => {
           <Route path="personal" element={<PersonalView />} />
           <Route path="personal/:username" element={<EditPersonalView />} />
 
-          <Route path="diagnostics" element={<NotImplemented />} />
-          <Route path="diagnostics/:id" element={<NotImplemented />} />
+          <Route path="diagnostics" element={<DiagnosticView />} />
+          <Route path="diagnostics/:id" element={<EditDiagnosticView />} />
 
-          <Route path="treatments" element={<NotImplemented />} />
-          <Route path="treatments/:id" element={<NotImplemented />} />
+          <Route path="treatments" element={<TreatmentView />} />
+          <Route path="treatments/:id" element={<EditTreatmentView />} />
 
-          <Route path="treatments-performed" element={<NotImplemented />} />
-          <Route path="treatments-performed/:id" element={<NotImplemented />} />
+          <Route
+            path="treatments-performed"
+            element={<TreatmentPerformedView />}
+          />
+          <Route
+            path="treatments-performed/:id"
+            element={<EditTreatmentPerformedView />}
+          />
 
           <Route path="appointments" element={<AppointmentView />} />
 
           <Route path="patients" element={<PatientView />} />
           <Route path="patients/:id" element={<EditPatientView />} />
           <Route path="patients/:id/records" element={<PatientRecordsView />} />
-
-          <Route path="records" element={<NotImplemented />} />
         </Route>
 
         <Route

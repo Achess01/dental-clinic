@@ -237,7 +237,7 @@ export const RecordForm = (props) => {
             {/* Add more options using API */}
             {formData.diagnostics.map((i, index) => (
               <option key={index} value={i.id}>
-                {i.name} {i.description}
+                {i.name}: {i.description}
               </option>
             ))}
           </AppSelect>
