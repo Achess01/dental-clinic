@@ -36,11 +36,7 @@ export const PatientForm = (props) => {
   const navigate = useNavigate();
 
   /* If a submit function is not provided */
-  const onSubmit =
-    props.onSubmit ||
-    function (data) {
-      console.log(data);
-    };
+  const onSubmit = props.onSubmit || function (data) {};
 
   /* Update field values */
   useEffect(() => {
@@ -185,7 +181,7 @@ export const PatientForm = (props) => {
         <>
           <AppButtonSecondary type="submit">Editar</AppButtonSecondary>
           <AppButtonDark type="button" onClick={(e) => navigate(-1)}>
-            <i class="bi bi-door-open"></i>
+            <i className="bi bi-door-open"></i>
           </AppButtonDark>
         </>
       ) : (

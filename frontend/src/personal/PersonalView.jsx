@@ -173,8 +173,9 @@ export const PersonalView = (props) => {
   return (
     <SmallContainer>
       <div className="d-flex flex-column align-items-center justify-content-center m-5">
+        <h1 className="m-5">Personal</h1>
         <AppButtonDark onClick={(e) => setCreate(true)}>
-          <i class="bi bi-file-earmark-plus-fill">Agregar personal</i>
+          <i className="bi bi-file-earmark-plus-fill">Agregar personal</i>
         </AppButtonDark>
         {create && createNewUser()}
         {loading ? <Spinner /> : TableUsers(usuarios)}

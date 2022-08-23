@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 // Components
-import { PatientForm } from "./PatientForm";
+import { AppointmentForm } from "./AppointmentForm";
 import { SmallContainer } from "../components/Container";
 import { AppButtonSecondary, AppButtonDark } from "../components/AppButton";
 import { Spinner } from "../components/Spinner";
@@ -14,48 +14,45 @@ import { ErrorFieldForm } from "../components/ErrorFieldForm";
 import { useSelector } from "react-redux";
 
 // Api
-import { getPatients, signUpPatient } from "../config/api";
+import { getAppointments, signUpAppointment } from "../config/api";
 
-// Router
-import { useNavigate } from "react-router-dom";
-
-export const PatientView = (props) => {
+export const AppointmentView = (props) => {
   const [create, setCreate] = useState(false);
-  const [patients, setPatients] = useState([]);
+  const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingSignUp, setLoadingSignUp] = useState(false);
+  const [specialists, setSpecialists] = useState([]);
 
   const [error, setError] = useState(false);
 
   const [fetch, setFetch] = useState(false);
 
-  const navigate = useNavigate();
-
   const user = useSelector((state) => state.user.user);
 
   const onSubmit = async (data) => {
     setLoadingSignUp(true);
-    const response = await signUpPatient({ data, token: user.token });
+    const response = await signUpAppointment({ data, token: user.token });
     setLoadingSignUp(false);
     if (!response) {
       setError(true);
     } else {
       setError(false);
-      navigate(-1);
+      alert("Cita creada");
     }
   };
 
+  /* Get all appointments */
   useEffect(() => {
-    const patientsFromApi = async () => {
+    const appointmentsFromApi = async () => {
       setLoading(true);
-      const response = await getPatients(user.token);
+      const response = await getAppointments(user.token);
       if (response !== null) {
-        setPatients(response);
+        setAppointments(response);
       }
       setLoading(false);
     };
 
-    patientsFromApi();
+    appointmentsFromApi();
   }, [fetch]);
 
   const createForm = () => (
@@ -68,17 +65,17 @@ export const PatientView = (props) => {
       >
         <i className="bi bi-chevron-up"></i>
       </AppButtonSecondary>
-      <h3>Agregar pacientes</h3>
-      {loadingSignUp ? <Spinner /> : <PatientForm onSubmit={onSubmit} />}
-      {error && (
-        <ErrorFieldForm>
-          Error al crear el paciente, verifique que el rut no sea repetido
-        </ErrorFieldForm>
+      <h3>Crear cita</h3>
+      {loadingSignUp ? (
+        <Spinner />
+      ) : (
+        <AppointmentForm onSubmit={onSubmit} user={user} />
       )}
+      {error && <ErrorFieldForm>Error al crear la cita</ErrorFieldForm>}
     </>
   );
 
-  const table = (patients) => (
+  const table = (appointments) => (
     <table className="table mt-5">
       <thead>
         <tr>
@@ -90,28 +87,28 @@ export const PatientView = (props) => {
         </tr>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Rut</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Nacimiento</th>
-          <th scope="col">Edad</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Paciente</th>
+          <th scope="col">Especialista</th>
         </tr>
       </thead>
       <tbody>
-        {patients.map((u, index) => (
+        {appointments.map((a, index) => (
           <tr key={index}>
             <th scope="row">{index + 1}</th>
-            <td>{u.rut}</td>
-            <td>{`${u.first_name} ${u.last_name}`}</td>
-            <td>{u.birthday}</td>
-            <td>{u.age}</td>
-            {(user.is_admin || user.is_staff) && (
+            <td>{new Date(a.date).toLocaleString()}</td>
+            <td>
+              {a.patient.rut} {a.patient.first_name} {a.patient.last_name}
+            </td>
+            <td>
+              {a.specialist.user.username} {a.specialist.user.first_name}{" "}
+              {a.specialist.user.last_name} ({a.specialist.speciality})
+            </td>
+            {user.is_secretary && (
               <td>
-                <Link to={u.rut}>Editar</Link>
+                <Link to={`${a.id}/`}>Editar</Link>
               </td>
             )}
-            <td>
-              <Link to={`${u.rut}/records`}>records</Link>
-            </td>
           </tr>
         ))}
       </tbody>
@@ -121,13 +118,14 @@ export const PatientView = (props) => {
   return (
     <SmallContainer>
       <div className="d-flex flex-column align-items-center justify-content-center m-5">
+        <h1 className="m-5">Citas</h1>
         {user.is_secretary && (
           <AppButtonDark onClick={(e) => setCreate(true)}>
-            <i className="bi bi-file-earmark-plus-fill">Nuevo</i>
+            <i className="bi bi-file-earmark-plus-fill">Nueva cita</i>
           </AppButtonDark>
         )}
         {create && createForm()}
-        {loading ? <Spinner /> : table(patients)}
+        {loading ? <Spinner /> : table(appointments)}
       </div>
     </SmallContainer>
   );

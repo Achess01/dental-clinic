@@ -31,3 +31,11 @@ export const AppButtonDark = (props) => {
     </button>
   );
 };
+
+export const AppButtonLink = (props) => {
+  return (
+    <button className="btn btn-link" {...props}>
+      {props.children}
+    </button>
+  );
+};

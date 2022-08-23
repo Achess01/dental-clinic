@@ -11,6 +11,8 @@ export const PATIENTS = "patients";
 
 export const RECORDS = "records";
 
+export const APPOINTMENTS = "appointments";
+
 export const signup = {
   admins: `${USERS}/clinic-admin/signup`,
   specialists: `${USERS}/specialists/signup`,
@@ -137,8 +139,13 @@ export const signUpPatient = async ({ data, token }) => {
   return await signUpGeneric({ data, token, path: PATIENTS });
 };
 
-export const getPatients = async (token) => {
-  return await getAllGeneric({ token, path: PATIENTS });
+export const getPatients = async (token, params = {}) => {
+  const base_path = PATIENTS + "?";
+  const path = Object.entries(params).reduce((prev, current) => {
+    return `${prev}${current[0]}=${current[1]}&`;
+  }, base_path);
+
+  return await getAllGeneric({ token, path });
 };
 
 export const updatePatient = async ({ id, token, data }) => {
@@ -153,14 +160,32 @@ export const deletePatient = async ({ id, token }) => {
   return await deleteGeneric({ id, token, path: PATIENTS });
 };
 
+// Appointments
+
+export const signUpAppointment = async ({ data, token }) => {
+  return await signUpGeneric({ data, token, path: APPOINTMENTS });
+};
+
+export const getAppointments = async (token) => {
+  return await getAllGeneric({ token, path: APPOINTMENTS });
+};
+
+export const updateAppointment = async ({ id, token, data }) => {
+  return await updateGeneric({ id, token, data, path: APPOINTMENTS });
+};
+
+export const getAppointment = async ({ id, token }) => {
+  return await getGeneric({ id, token, path: APPOINTMENTS });
+};
+
 // Records
 
 export const getRecords = async ({ token, params }) => {
-  const query_parmas = params || {};
-  const baase_path = RECORDS + "?";
-  const queries = Object.entries(query_parmas).reduce((prev, current) => {
+  const query_params = params || {};
+  const base_path = RECORDS + "?";
+  const queries = Object.entries(query_params).reduce((prev, current) => {
     return `${prev}${current[0]}=${current[1]}&`;
-  }, baase_path);
+  }, base_path);
 
   return await getAllGeneric({ token, path: queries });
 };

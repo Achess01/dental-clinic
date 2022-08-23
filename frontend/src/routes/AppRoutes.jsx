@@ -9,9 +9,12 @@ import { ChangePasswordForm } from "../personal/ChangeInitialPasswordView";
 import { PersonalView } from "../personal/PersonalView";
 import { EditPersonalView } from "../personal/EditPersonalView";
 
-import { PatientView } from "../patients/PatienView";
+import { PatientView } from "../patients/PatientView";
 import { EditPatientView } from "../patients/EditPatientView";
 import { PatientRecordsView } from "../patients/PatientRecordsView";
+
+import { AppointmentView } from "../appointments/AppointmentView";
+import { EditAppointmentView } from "../appointments/EditAppointmentView";
 
 // Redux
 import { useSelector } from "react-redux";
@@ -102,11 +105,12 @@ const AppRoutes = (props) => {
           <Route path="treatments-performed" element={<NotImplemented />} />
           <Route path="treatments-performed/:id" element={<NotImplemented />} />
 
-          <Route path="appointments" element={<NotImplemented />} />
+          <Route path="appointments" element={<AppointmentView />} />
 
           <Route path="patients" element={<PatientView />} />
           <Route path="patients/:id" element={<EditPatientView />} />
           <Route path="patients/:id/records" element={<PatientRecordsView />} />
+
           <Route path="records" element={<NotImplemented />} />
         </Route>
 
@@ -127,9 +131,13 @@ const AppRoutes = (props) => {
         >
           {/* Secretary routes */}
           <Route path="" element={<Welcome />} />
-          <Route path="appointments" element={<NotImplemented />} />
-          <Route path="patients" element={<NotImplemented />} />
-          <Route path="patients/:id/records" element={<NotImplemented />} />
+
+          <Route path="appointments" element={<AppointmentView />} />
+          <Route path="appointments/:id" element={<EditAppointmentView />} />
+
+          <Route path="patients" element={<PatientView />} />
+          <Route path="patients/:id" element={<EditPatientView />} />
+          <Route path="patients/:id/records" element={<PatientRecordsView />} />
         </Route>
 
         <Route
