@@ -12,6 +12,8 @@ import {
 
 import { useSelector } from "react-redux";
 
+import logo from "../assets/CIAN.svg";
+
 export const Header = (props) => {
   const user = useSelector((state) => state.user.user);
 
@@ -75,7 +77,7 @@ export const Header = (props) => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <SmallContainer>
         <Link className="navbar-brand" to="">
-          <img src="/src/assets/CIAN.svg" alt="logo" width="40px" />
+          <img src={logo} alt="logo" width="40px" />
         </Link>
         {user && (
           <div className="me-5">

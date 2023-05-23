@@ -11,6 +11,7 @@ import { Spinner } from "../components/Spinner";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { login, clearStatus } from "../store/user";
+import logo from "../assets/CIAN.svg";
 
 export const LoginForm = (props) => {
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ export const LoginForm = (props) => {
     <SmallContainer>
       <div className="d-flex flex-column align-items-center justify-content-center m-5">
         <img
-          src="/src/assets/CIAN.svg"
+          src={logo}
           alt="logo"
           width="150px"
           className="my-5"
